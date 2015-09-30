@@ -1,0 +1,204 @@
+#!/bin/sh
+
+# Git Uploader
+# Federico Damián Schonborn <github.com/feskyde>
+# License: WTFPL
+
+if [ ! -f /usr/bin/git ];then
+		echo -e ""
+		echo -e "\e[31;1mERROR:\e[0m"
+		echo -e "\e[1mCommand git not found."
+		echo -e "Please check your installation.\e[0m"
+		echo -e "\e[31;1mERROR CODE: 1\e[0m"
+		echo -e ""
+		exit
+fi
+
+case $1 in
+	"help"|"")
+		echo -e "\e[1m"
+		echo -e "Usage: gitup [COMMAND]"
+		echo -e "\e[0m"
+		echo -e "List of commands:"
+		echo -e ""
+		echo -e "Configuration:"
+		echo -e ""
+		echo -e "luconf				local user config"
+		echo -e "guconf				global user config"
+		echo -e ""
+		echo -e "Repository:"
+		echo -e ""
+		echo -e "init				inits git and adds the remote origin"
+		echo -e "rsetup				set-up a repository"
+		echo -e "commit				push a new commit"
+		echo -e "clone				clone a repository"
+		echo -e "status				see repository status"
+		echo -e ""
+		echo -e "Branches:"
+		echo -e ""
+		echo -e "bcreate				create a new branch"
+		echo -e "bremove				remove a branch"
+		echo -e "bswitch				switch between branches"
+		echo -e ""
+		;;
+	"info")
+		echo -e "\e[1m"
+		echo -e "Git Uploader."
+		echo -e "A shell script to make git easier."
+		echo -e ""
+		echo -e "Version: gitup/master"
+		echo -e "Website: https://github.com/feskyde/gitup"
+		echo -e "Git Uploader is released under the WTFPL license."
+		echo -e "\e[0m"
+		;;
+	"guconf")
+		echo -e ""
+		read -p "Your username: " username
+		echo -e ""
+		read -p "Your email: " usermail
+		echo -e ""
+		echo -e "Setting..."
+		git config --global user.name "$username"
+		git config --global user.email "$usermail"
+		echo -e ""
+		echo -e "Done!"
+		echo -e ""
+		;;
+	"luconf")
+		echo -e ""
+		read -p "Your username: " username
+		echo -e ""
+		read -p "Your email: " usermail
+		echo -e ""
+		echo -e "Setting..."
+		git config --local user.name "$username"
+		git config --local user.email "$usermail"
+		echo -e ""
+		echo -e "Done!"
+		echo -e ""
+		;;
+	"init")
+		echo -e ""
+		echo -e "Initializing git..."
+		git init
+		echo -e ""
+		read -p "Your username: " username
+		echo -e ""
+		read -p "Repository name: " reponame
+		echo -e ""
+		echo -e "Adding remote origin..."
+		git remote add origin https://github.com/"$username"/"$reponame".git
+		echo -e "Done!"
+		echo -e ""
+		;;
+	"rsetup")
+		echo -e ""
+		echo -e "Initializing git on this repository..."
+		git init
+		echo -e ""
+		echo -e "Checking file changes..."
+		git add .
+		echo -e ""
+		read -p "Commit message: " commitm
+		echo -e ""
+		echo -e "Adding message to commit..."
+		git commit -m "$commitm"
+		echo -e ""
+		read -p "Your username: " username
+		echo -e ""
+		read -p "Repository name: " reponame
+		echo -e ""
+		echo -e "Adding remote origin..."
+		git remote add origin https://github.com/"$username"/"$reponame".git
+		echo -e ""
+		echo -e "Pushing to master branch..."
+		git push -u origin master
+		echo -e ""
+		echo -e "Done!"
+		echo -e ""
+		;;
+	"commit")
+		if [ ! -d ./.git ];then
+			echo -e ""
+			echo -e "There is not a .git folder present."
+			echo -e ""
+			echo -e "Running rsetup..."
+			echo -e ""
+			echo -e "Initializing git..."
+			git init
+			echo -e ""
+			read -p "Your username: " username
+			echo -e ""
+			read -p "Repository name: " reponame
+			echo -e ""
+			echo -e "Adding remote origin..."
+			git remote add origin https://github.com/"$username"/"$reponame".git
+			echo -e "Done!"
+			echo -e ""
+		fi
+		echo -e ""
+		echo -e "Checking file changes..."
+		git add .
+		echo -e ""
+		read -p "Commit message: " commitm
+		echo -e ""
+		echo -e "Adding message to commit..."
+		git commit -m "$commitm"
+		echo -e ""
+		read -p "Branch to push: " brapush
+		echo -e ""
+		echo -e "Pushing to "$brapush" branch..."
+		git push -u origin "$brapush"
+		echo -e ""
+		echo -e "Done!"
+		echo -e ""
+		;;
+	"clone")
+		echo -e ""
+		read -p "Repository to clone: " repoclone
+		echo -e ""
+		read -p "Repository owner: " repoowner
+		echo -e ""
+		git clone https://github.com/"$repoowner"/"$repoclone".git
+		echo -e ""
+		echo -e "Done!"
+		echo -e ""
+		;;
+	"status")
+		echo -e ""
+		echo -e "Repository status:"
+		echo -e ""
+		git status
+		echo -e ""
+		;;
+	"bcreate")
+		echo -e ""
+		read -p "Branch to create: " branname
+		echo -e ""
+		echo -e "Creating branch "$branname"..."
+		git branch "$branname"
+		echo -e ""
+		echo -e "Done!"
+		echo -e ""
+		;;
+	"bremove")
+		echo -e ""
+		read -p "Branch to remove: " branname
+		echo -e ""
+		echo -e "Removing branch "$branname"..."
+		git branch -D "$branname"
+		echo -e ""
+		echo -e "Done!"
+		echo -e ""
+		;;
+	"bswitch")
+		echo -e ""
+		read -p "Switch to branch: " branname
+		echo -e ""
+		echo -e "Switching to branch "$branname"..."
+		git checkout "$branname"
+		echo -e ""
+		echo -e "Done!"
+		echo -e ""
+		;;
+esac
