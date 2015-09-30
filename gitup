@@ -4,6 +4,8 @@
 # Federico Damián Schonborn <github.com/feskyde>
 # License: WTFPL
 
+## pre-execution checks
+
 # check if 'git' exists
 if [ ! -f /usr/bin/git ];then
 	echo -e ""
@@ -15,10 +17,14 @@ if [ ! -f /usr/bin/git ];then
 	exit
 fi
 
-# select options
+## select options
+
+# options for funcion chkconf
 SELCONF="\"Set global configuration\" \"Set local configuration\""
 
-# functions
+## functions
+
+# checks if any configuration file is present
 function chkconf {
 	if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ];then
 		echo -e ""
@@ -60,6 +66,8 @@ function chkconf {
 		done
 	fi
 }
+
+# check if any .git folder is present
 
 function chkgitf {
 		if [ ! -d ./.git ];then
@@ -116,7 +124,7 @@ case $1 in
 		echo -e "Git Uploader."
 		echo -e "A shell script to make git easier."
 		echo -e ""
-		echo -e "Version: gitup/master"
+		echo -e "Version: 0.1 "Tango""
 		echo -e "Website: https://github.com/feskyde/gitup"
 		echo -e "Git Uploader is released under the WTFPL license."
 		echo -e "\e[0m"
