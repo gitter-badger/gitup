@@ -16,7 +16,7 @@ if [ ! -f /usr/bin/git ];then
 fi
 
 # select options
-SELCONF="Global Local"
+SELCONF="\"Set global configuration\" \"Set local configuration\""
 
 # functions
 function chkconf {
@@ -24,9 +24,10 @@ function chkconf {
 		echo -e ""
 		echo -e "There is not any config file present."
 		echo -e ""
-		echo -e "What script do you want to execute?"
-		select opt in $SELCONF;do
-			if [ "$opt" = "Global" ];then
+		echo -e "What configuration do you want to set?"
+		eval set $SELCONF
+		select opt in "$@";do
+			if [ "$opt" = "Set global configuration" ];then
 				echo -e ""
 				read -p "Your username: " username
 				echo -e ""
@@ -39,7 +40,7 @@ function chkconf {
 				echo -e "Done!"
 				echo -e ""
 				exit
-			elif [ "$opt" = "Local" ];then
+			elif [ "$opt" = "Set local configuration" ];then
 				echo -e ""
 				read -p "Your username: " username
 				echo -e ""
