@@ -4,17 +4,84 @@
 # Federico Damián Schonborn <github.com/feskyde>
 # License: WTFPL
 
+# check if 'git' exists
+if [ ! -f /usr/bin/git ];then
+	echo -e ""
+	echo -e "\e[31;1mERROR:\e[0m"
+	echo -e "\e[1mCommand git not found."
+	echo -e "Please check your installation.\e[0m"
+	echo -e "\e[31;1mERROR CODE: 1\e[0m"
+	echo -e ""
+	exit
+fi
+
+# select options
 SELCONF="Global Local"
 
-if [ ! -f /usr/bin/git ];then
+# functions
+function chkconf {
+	if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ];then
 		echo -e ""
-		echo -e "\e[31;1mERROR:\e[0m"
-		echo -e "\e[1mCommand git not found."
-		echo -e "Please check your installation.\e[0m"
-		echo -e "\e[31;1mERROR CODE: 1\e[0m"
+		echo -e "There is not any config file present."
 		echo -e ""
-		exit
-fi
+		echo -e "What script do you want to execute?"
+		select opt in $SELCONF;do
+			if [ "$opt" = "Global" ];then
+				echo -e ""
+				read -p "Your username: " username
+				echo -e ""
+				read -p "Your email: " usermail
+				echo -e ""
+				echo -e "Setting..."
+				git config --global user.name "$username"
+				git config --global user.email "$usermail"
+				echo -e ""
+				echo -e "Done!"
+				echo -e ""
+				exit
+			elif [ "$opt" = "Local" ];then
+				echo -e ""
+				read -p "Your username: " username
+				echo -e ""
+				read -p "Your email: " usermail
+				echo -e ""
+				echo -e "Setting..."
+				git config --local user.name "$username"
+				git config --local user.email "$usermail"
+				echo -e ""
+				echo -e "Done!"
+				echo -e ""
+				exit
+			else
+				echo -e "You no selected anything!"
+				exit
+			fi
+		done
+	fi
+}
+
+function chkgitf {
+		if [ ! -d ./.git ];then
+		echo -e ""
+		echo -e "There is not a .git folder present."
+		echo -e ""
+		echo -e "Running rsetup..."
+		echo -e ""
+		echo -e "Initializing git..."
+		git init
+		echo -e ""
+		read -p "Your username: " username
+		echo -e ""
+		read -p "Repository name: " reponame
+		echo -e ""
+		echo -e "Adding remote origin..."
+		git remote add origin https://github.com/"$username"/"$reponame".git
+		echo -e "Done!"
+		echo -e ""
+	fi
+}
+
+# lets start...
 
 case $1 in
 	"help"|"")
@@ -80,44 +147,7 @@ case $1 in
 		echo -e ""
 		;;
 	"init")
-		if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ];then
-			echo -e ""
-			echo -e "There is not any config file present."
-			echo -e ""
-			echo -e "What script do you want to execute?"
-			select opt in $SELCONF;do
-				if [ "$opt" = "Global" ];then
-					echo -e ""
-					read -p "Your username: " username
-					echo -e ""
-					read -p "Your email: " usermail
-					echo -e ""
-					echo -e "Setting..."
-					git config --global user.name "$username"
-					git config --global user.email "$usermail"
-					echo -e ""
-					echo -e "Done!"
-					echo -e ""
-					exit
-				elif [ "$opt" = "Local" ];then
-					echo -e ""
-					read -p "Your username: " username
-					echo -e ""
-					read -p "Your email: " usermail
-					echo -e ""
-					echo -e "Setting..."
-					git config --local user.name "$username"
-					git config --local user.email "$usermail"
-					echo -e ""
-					echo -e "Done!"
-					echo -e ""
-					exit
-				else
-					echo -e "You no selected anything!"
-					exit
-			fi
-		done
-		fi
+		chkconf
 		echo -e ""
 		echo -e "Initializing git..."
 		git init
@@ -132,44 +162,7 @@ case $1 in
 		echo -e ""
 		;;
 	"rsetup")
-		if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ];then
-			echo -e ""
-			echo -e "There is not any config file present."
-			echo -e ""
-			echo -e "What script do you want to execute?"
-			select opt in $SELCONF;do
-				if [ "$opt" = "Global" ];then
-					echo -e ""
-					read -p "Your username: " username
-					echo -e ""
-					read -p "Your email: " usermail
-					echo -e ""
-					echo -e "Setting..."
-					git config --global user.name "$username"
-					git config --global user.email "$usermail"
-					echo -e ""
-					echo -e "Done!"
-					echo -e ""
-					exit
-				elif [ "$opt" = "Local" ];then
-					echo -e ""
-					read -p "Your username: " username
-					echo -e ""
-					read -p "Your email: " usermail
-					echo -e ""
-					echo -e "Setting..."
-					git config --local user.name "$username"
-					git config --local user.email "$usermail"
-					echo -e ""
-					echo -e "Done!"
-					echo -e ""
-					exit
-				else
-					echo -e "You no selected anything!"
-					exit
-			fi
-		done
-		fi
+		chkconf
 		echo -e ""
 		echo -e "Initializing git on this repository..."
 		git init
@@ -196,62 +189,8 @@ case $1 in
 		echo -e ""
 		;;
 	"commit")
-		if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ];then
-			echo -e ""
-			echo -e "There is not any config file present."
-			echo -e ""
-			echo -e "What script do you want to execute?"
-			select opt in $SELCONF;do
-				if [ "$opt" = "Global" ];then
-					echo -e ""
-					read -p "Your username: " username
-					echo -e ""
-					read -p "Your email: " usermail
-					echo -e ""
-					echo -e "Setting..."
-					git config --global user.name "$username"
-					git config --global user.email "$usermail"
-					echo -e ""
-					echo -e "Done!"
-					echo -e ""
-					exit
-				elif [ "$opt" = "Local" ];then
-					echo -e ""
-					read -p "Your username: " username
-					echo -e ""
-					read -p "Your email: " usermail
-					echo -e ""
-					echo -e "Setting..."
-					git config --local user.name "$username"
-					git config --local user.email "$usermail"
-					echo -e ""
-					echo -e "Done!"
-					echo -e ""
-					exit
-				else
-					echo -e "You no selected anything!"
-					exit
-			fi
-		done
-		fi
-		if [ ! -d ./.git ];then
-			echo -e ""
-			echo -e "There is not a .git folder present."
-			echo -e ""
-			echo -e "Running rsetup..."
-			echo -e ""
-			echo -e "Initializing git..."
-			git init
-			echo -e ""
-			read -p "Your username: " username
-			echo -e ""
-			read -p "Repository name: " reponame
-			echo -e ""
-			echo -e "Adding remote origin..."
-			git remote add origin https://github.com/"$username"/"$reponame".git
-			echo -e "Done!"
-			echo -e ""
-		fi
+		chkconf
+		chkgitf
 		echo -e ""
 		echo -e "Checking file changes..."
 		git add .

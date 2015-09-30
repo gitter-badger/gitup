@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Git Uploader - INSTALLER
+
+if [ ! $(whoami) = root ];then
+	echo -e ""
+	echo -e "\e[31;1mERROR:\e[0m"
+	echo -e "\e[1mYou cannot install Git Uploader."
+	echo -e "Check if you are the root user.\e[0m"
+	echo -e "\e[31;1mERROR CODE: 0\e[0m"
+	echo -e ""
+	exit
+else
+	echo -e ""
+	echo -e "Installing..."
+	cp {gitup} /usr/bin/
+	echo -e ""
+	echo -e "Done!"
+	echo -e ""
+fi
