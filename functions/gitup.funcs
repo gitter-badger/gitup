@@ -25,10 +25,9 @@ SELCONF="\"Set global configuration\" \"Set local configuration\""
 function chkconf {
 	if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ];then
 		echo -e "\e[1m"
-		echo -e "There is not any config file present."
-		echo -e "\e[0m\e[1m"
-		echo -e "What configuration do you want to set?"
-		echo -e "\e[0m"
+		echo -e "There is not any config file present.\e[0m"
+		echo -e "\e[1m"
+		echo -e "What configuration do you want to set?\e[0m"
 		eval set $SELCONF
 		select opt in "$@";do
 			if [ "$opt" = "Set global configuration" ];then
@@ -37,8 +36,7 @@ function chkconf {
 				echo -e ""
 				read -p $'\e[1mYour email: \e[0m' usermail
 				echo -e "\e[1m"
-				echo -e "Setting..."
-				echo -e "\e[0m"
+				echo -e "Setting...\e[0m"
 				git config --global user.name "$username"
 				git config --global user.email "$usermail"
 				echo -e "\e[1m"
@@ -51,8 +49,7 @@ function chkconf {
 				echo -e ""
 				read -p $'\e[1mYour email: \e[0m' usermail
 				echo -e "\e[1m"
-				echo -e "Setting..."
-				echo -e "\e[0m"
+				echo -e "Setting...\e[0m"
 				git config --local user.name "$username"
 				git config --local user.email "$usermail"
 				echo -e "\e[1m"
@@ -79,16 +76,14 @@ function chkgitf {
 		echo -e ""
 		echo -e "Running rsetup..."
 		echo -e ""
-		echo -e "Initializing git..."
-		echo -e "\e[0m"
+		echo -e "Initializing git...\e[0m"
 		git init
 		echo -e ""
 		read -p $'\e[1mYour username: \e[0m' username
 		echo -e ""
 		read -p $'\e[1mRepository name: \e[0m' reponame
 		echo -e "\e[1m"
-		echo -e "Adding remote origin..."
-		echo -e "\e[0m"
+		echo -e "Adding remote origin...\e[0m"
 		git remote add 
 origin https://github.com/"$username"/"$reponame".git
 		echo -e "\e[1m"

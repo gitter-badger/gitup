@@ -58,8 +58,7 @@ case $1 in
 		echo -e ""
 		read -p $'\e[1mYour email: \e[0m' usermail
 		echo -e "\e[1m"
-		echo -e "Setting..."
-		echo -e "\e[0m"
+		echo -e "Setting...\e[0m"
 		git config --global user.name "$username"
 		git config --global user.email "$usermail"
 		echo -e "\e[1m"
@@ -72,8 +71,7 @@ case $1 in
 		echo -e ""
 		read -p $'\e[1mYour email: \e[0m' usermail
 		echo -e "\e[1m"
-		echo -e "Setting..."
-		echo -e "\e[0m"
+		echo -e "Setting...\e[0m"
 		git config --local user.name "$username"
 		git config --local user.email "$usermail"
 		echo -e "\e[1m"
@@ -83,17 +81,16 @@ case $1 in
 	"init")
 		chkconf
 		echo -e "\e[1m"
-		echo -e "Initializing git..."
-		echo -e "\e[0m"
+		echo -e "Initializing git...\e[0m"
 		git init
 		echo -e ""
 		read -p $'\e[1mYour username: \e[0m' username
 		echo -e ""
 		read -p $'\e[1mRepository name: \e[0m' reponame
 		echo -e "\e[1m"
-		echo -e "Adding remote origin..."
-		echo -e "\e[0m"
-		git remote add origin https://github.com/"$username"/"$reponame".git
+		echo -e "Adding remote origin...\e[0m"
+		git remote add origin 
+https://github.com/"$username"/"$reponame".git
 		echo -e "\e[1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
@@ -101,30 +98,26 @@ case $1 in
 	"rsetup")
 		chkconf
 		echo -e "\e[1m"
-		echo -e "Initializing git on this repository..."
-		echo -e "\e[0m"
+		echo -e "Initializing git on this repository...\e[0m"
 		git init
 		echo -e "\e[1m"
-		echo -e "Checking file changes..."
-		echo -e "\e[0m"
+		echo -e "Checking file changes...\e[0m"
 		git add .
 		echo -e ""
 		read -p $'\e[1mCommit message: \e[0m' commitm
 		echo -e "\e[1m"
-		echo -e "Adding message to commit..."
-		echo -e "\e[0m"
+		echo -e "Adding message to commit...\e[0m"
 		git commit -m "$commitm"
 		echo -e ""
 		read -p $'\e[1mYour username: \e[0m' username
 		echo -e ""
 		read -p $'\e[1mRepository name: \e[0m' reponame
 		echo -e "\e[1m"
-		echo -e "Adding remote origin..."
-		echo -e "\e[0m"
-		git remote add origin https://github.com/"$username"/"$reponame".git
+		echo -e "Adding remote origin...\e[0m"
+		git remote add origin 
+https://github.com/"$username"/"$reponame".git
 		echo -e "\e[1m"
-		echo -e "Pushing to master branch..."
-		echo -e "\e[0m"
+		echo -e "Pushing to master branch...\e[0m"
 		git push -u origin master
 		echo -e "\e[1m"
 		echo -e "Done!"
@@ -134,20 +127,17 @@ case $1 in
 		chkconf
 		chkgitf
 		echo -e "\e[1m"
-		echo -e "Checking file changes..."
-		echo -e "\e[0m"
+		echo -e "Checking file changes...\e[0m"
 		git add .
 		echo -e ""
 		read -p $'\e[1mCommit message: \e[0m' commitm
 		echo -e "\e[1m"
-		echo -e "Adding message to commit..."
-		echo -e "\e[0m"
+		echo -e "Adding message to commit...\e[0m"
 		git commit -m "$commitm"
 		echo -e ""
 		read -p $'\e[1mBranch to push: \e[0m' brapush
 		echo -e "\e[1m"
-		echo -e "Pushing to "$brapush" branch..."
-		echo -e "\e[0m"
+		echo -e "Pushing to "$brapush" branch...\e[0m"
 		git push -u origin "$brapush"
 		echo -e "\e[1m"
 		echo -e "Done!"
@@ -166,8 +156,7 @@ case $1 in
 		;;
 	"status")
 		echo -e "\e[1m"
-		echo -e "Repository status:"
-		echo -e "\e[0m"
+		echo -e "Repository status:\e[0m"
 		git status
 		echo -e ""
 		;;
@@ -175,8 +164,7 @@ case $1 in
 		echo -e ""
 		read -p $'\e[1mName your new branch: \e[0m' branname
 		echo -e "\e[1m"
-		echo -e "Creating branch "$branname"..."
-		echo -e "\e[0m"
+		echo -e "Creating branch "$branname"...\e[0m"
 		git branch "$branname"
 		echo -e "\e[1m"
 		echo -e "Done!"
@@ -186,8 +174,7 @@ case $1 in
 		echo -e ""
 		read -p $'\e[1mBranch to remove: \e[0m' branname
 		echo -e "\e[1m"
-		echo -e "Removing branch "$branname"..."
-		echo -e "\e[0m"
+		echo -e "Removing branch "$branname"...\e[0m"
 		git branch -D "$branname"
 		echo -e "\e[1m"
 		echo -e "Done!"
@@ -197,8 +184,7 @@ case $1 in
 		echo -e ""
 		read -p $'\e[1mBranch to switch: \e[0m' branname
 		echo -e "\e[1m"
-		echo -e "Switching to branch "$branname"..."
-		echo -e ""
+		echo -e "Switching to branch "$branname"...\e[0m"
 		git checkout "$branname"
 		echo -e "\e[1m"
 		echo -e "Done!"
