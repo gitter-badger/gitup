@@ -1,0 +1,100 @@
+#!/bin/bash
+
+# GitUp functios file
+
+# start of functions #
+
+## checks if 'git' exists
+
+function chkgitb {
+	if [ ! -f /usr/bin/git ];then
+		echo -e ""
+		echo -e "\e[31;1mERROR:\e[0m"
+		echo -e "\e[1mCommand git not found."
+		echo -e "Please check your installation.\e[0m"
+		echo -e "\e[31;1mERROR CODE: 1\e[0m"
+		echo -e ""
+		exit
+	fi
+}
+
+## checks if any configuration file is present
+
+SELCONF="\"Set global configuration\" \"Set local configuration\""
+
+function chkconf {
+	if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ];then
+		echo -e "\e[1m"
+		echo -e "There is not any config file present."
+		echo -e "\e[0m\e[1m"
+		echo -e "What configuration do you want to set?"
+		echo -e "\e[0m"
+		eval set $SELCONF
+		select opt in "$@";do
+			if [ "$opt" = "Set global configuration" ];then
+				echo -e ""
+				read -p $'\e[1mYour username: \e[0m' username
+				echo -e ""
+				read -p $'\e[1mYour email: \e[0m' usermail
+				echo -e "\e[1m"
+				echo -e "Setting..."
+				echo -e "\e[0m"
+				git config --global user.name "$username"
+				git config --global user.email "$usermail"
+				echo -e "\e[1m"
+				echo -e "Done!"
+				echo -e "\e[0m"
+				exit
+			elif [ "$opt" = "Set local configuration" ];then
+				echo -e ""
+				read -p $'\e[1mYour username: \e[0m' username
+				echo -e ""
+				read -p $'\e[1mYour email: \e[0m' usermail
+				echo -e "\e[1m"
+				echo -e "Setting..."
+				echo -e "\e[0m"
+				git config --local user.name "$username"
+				git config --local user.email "$usermail"
+				echo -e "\e[1m"
+				echo -e "Done!"
+				echo -e "\e[0m"
+				exit
+			else
+				echo -e "\e[31;1m"
+				echo -e "ERROR:"
+				echo -e "You no selected anything!"
+				echo -e "\e[0m"
+				exit
+			fi
+		done
+	fi
+}
+
+## checks if any .git folder is present
+
+function chkgitf {
+		if [ ! -d ./.git ];then
+		echo -e "\e[1m"
+		echo -e "There is not a .git folder present."
+		echo -e ""
+		echo -e "Running rsetup..."
+		echo -e ""
+		echo -e "Initializing git..."
+		echo -e "\e[0m"
+		git init
+		echo -e ""
+		read -p $'\e[1mYour username: \e[0m' username
+		echo -e ""
+		read -p $'\e[1mRepository name: \e[0m' reponame
+		echo -e "\e[1m"
+		echo -e "Adding remote origin..."
+		echo -e "\e[0m"
+		git remote add 
+origin https://github.com/"$username"/"$reponame".git
+		echo -e "\e[1m"
+		echo -e "Done!"
+		echo -e "\e[0m"
+	fi
+}
+
+# end of functions #

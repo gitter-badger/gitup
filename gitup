@@ -1,103 +1,26 @@
 #!/bin/sh
 
-# Git Uploader
+# GitUp
 # Federico Damián Schonborn <github.com/feskyde>
 # License: WTFPL
 
-## pre-execution checks
+# search for functions on gitup.funcs file
 
-# check if 'git' exists
-if [ ! -f /usr/bin/git ];then
-	echo -e ""
-	echo -e "\e[31;1mERROR:\e[0m"
-	echo -e "\e[1mCommand git not found."
-	echo -e "Please check your installation.\e[0m"
-	echo -e "\e[31;1mERROR CODE: 1\e[0m"
-	echo -e ""
-	exit
+if [ -f /etc/gitup/gitup.funcs ];then
+        source /etc/gitup/gitup.funcs
+        else
+        source $(pwd)/functions/gitup.funcs
 fi
-
-## select options
-
-# options for funcion chkconf
-SELCONF="\"Set global configuration\" \"Set local configuration\""
-
-## functions
-
-# checks if any configuration file is present
-function chkconf {
-	if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ];then
-		echo -e ""
-		echo -e "There is not any config file present."
-		echo -e ""
-		echo -e "What configuration do you want to set?"
-		eval set $SELCONF
-		select opt in "$@";do
-			if [ "$opt" = "Set global configuration" ];then
-				echo -e ""
-				read -p "Your username: " username
-				echo -e ""
-				read -p "Your email: " usermail
-				echo -e ""
-				echo -e "Setting..."
-				git config --global user.name "$username"
-				git config --global user.email "$usermail"
-				echo -e ""
-				echo -e "Done!"
-				echo -e ""
-				exit
-			elif [ "$opt" = "Set local configuration" ];then
-				echo -e ""
-				read -p "Your username: " username
-				echo -e ""
-				read -p "Your email: " usermail
-				echo -e ""
-				echo -e "Setting..."
-				git config --local user.name "$username"
-				git config --local user.email "$usermail"
-				echo -e ""
-				echo -e "Done!"
-				echo -e ""
-				exit
-			else
-				echo -e "You no selected anything!"
-				exit
-			fi
-		done
-	fi
-}
-
-# check if any .git folder is present
-
-function chkgitf {
-		if [ ! -d ./.git ];then
-		echo -e ""
-		echo -e "There is not a .git folder present."
-		echo -e ""
-		echo -e "Running rsetup..."
-		echo -e ""
-		echo -e "Initializing git..."
-		git init
-		echo -e ""
-		read -p "Your username: " username
-		echo -e ""
-		read -p "Repository name: " reponame
-		echo -e ""
-		echo -e "Adding remote origin..."
-		git remote add origin https://github.com/"$username"/"$reponame".git
-		echo -e "Done!"
-		echo -e ""
-	fi
-}
 
 # lets start...
 
+chkgitb
 case $1 in
 	"help"|"")
 		echo -e "\e[1m"
-		echo -e "Usage: gitup [COMMAND]"
+		echo -e "Usage: gitup [OPTION]"
 		echo -e "\e[0m"
-		echo -e "List of commands:"
+		echo -e "List of options:"
 		echo -e ""
 		echo -e "Configuration:"
 		echo -e ""
@@ -121,148 +44,164 @@ case $1 in
 		;;
 	"about")
 		echo -e "\e[1m"
-		echo -e "Git Uploader."
+		echo -e "GitUp:"
 		echo -e "A shell script to make git easier."
 		echo -e ""
-		echo -e "Version: 0.1 "Tango""
+		echo -e "Version: 0.1 "Castanets""
 		echo -e "Website: https://github.com/feskyde/gitup"
-		echo -e "Git Uploader is released under the WTFPL license."
+		echo -e "GitUp is released under the WTFPL license."
 		echo -e "\e[0m"
 		;;
 	"guconf")
 		echo -e ""
-		read -p "Your username: " username
+		read -p $'\e[1mYour username: \e[0m' username
 		echo -e ""
-		read -p "Your email: " usermail
-		echo -e ""
+		read -p $'\e[1mYour email: \e[0m' usermail
+		echo -e "\e[1m"
 		echo -e "Setting..."
+		echo -e "\e[0m"
 		git config --global user.name "$username"
 		git config --global user.email "$usermail"
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Done!"
-		echo -e ""
+		echo -e "\e[0m"
 		;;
 	"luconf")
 		echo -e ""
-		read -p "Your username: " username
+		read -p $'\e[1mYour username: \e[0m' username
 		echo -e ""
-		read -p "Your email: " usermail
-		echo -e ""
+		read -p $'\e[1mYour email: \e[0m' usermail
+		echo -e "\e[1m"
 		echo -e "Setting..."
+		echo -e "\e[0m"
 		git config --local user.name "$username"
 		git config --local user.email "$usermail"
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Done!"
-		echo -e ""
+		echo -e "\e[0m"
 		;;
 	"init")
 		chkconf
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Initializing git..."
+		echo -e "\e[0m"
 		git init
 		echo -e ""
-		read -p "Your username: " username
+		read -p $'\e[1mYour username: \e[0m' username
 		echo -e ""
-		read -p "Repository name: " reponame
-		echo -e ""
+		read -p $'\e[1mRepository name: \e[0m' reponame
+		echo -e "\e[1m"
 		echo -e "Adding remote origin..."
+		echo -e "\e[0m"
 		git remote add origin https://github.com/"$username"/"$reponame".git
+		echo -e "\e[1m"
 		echo -e "Done!"
-		echo -e ""
+		echo -e "\e[0m"
 		;;
 	"rsetup")
 		chkconf
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Initializing git on this repository..."
+		echo -e "\e[0m"
 		git init
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Checking file changes..."
+		echo -e "\e[0m"
 		git add .
 		echo -e ""
-		read -p "Commit message: " commitm
-		echo -e ""
+		read -p $'\e[1mCommit message: \e[0m' commitm
+		echo -e "\e[1m"
 		echo -e "Adding message to commit..."
+		echo -e "\e[0m"
 		git commit -m "$commitm"
 		echo -e ""
-		read -p "Your username: " username
+		read -p $'\e[1mYour username: \e[0m' username
 		echo -e ""
-		read -p "Repository name: " reponame
-		echo -e ""
+		read -p $'\e[1mRepository name: \e[0m' reponame
+		echo -e "\e[1m"
 		echo -e "Adding remote origin..."
+		echo -e "\e[0m"
 		git remote add origin https://github.com/"$username"/"$reponame".git
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Pushing to master branch..."
+		echo -e "\e[0m"
 		git push -u origin master
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Done!"
-		echo -e ""
+		echo -e "\e[0m"
 		;;
 	"commit")
 		chkconf
 		chkgitf
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Checking file changes..."
+		echo -e "\e[0m"
 		git add .
 		echo -e ""
-		read -p "Commit message: " commitm
-		echo -e ""
+		read -p $'\e[1mCommit message: \e[0m' commitm
+		echo -e "\e[1m"
 		echo -e "Adding message to commit..."
+		echo -e "\e[0m"
 		git commit -m "$commitm"
 		echo -e ""
-		read -p "Branch to push: " brapush
-		echo -e ""
+		read -p $'\e[1mBranch to push: \e[0m' brapush
+		echo -e "\e[1m"
 		echo -e "Pushing to "$brapush" branch..."
+		echo -e "\e[0m"
 		git push -u origin "$brapush"
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Done!"
-		echo -e ""
+		echo -e "\e[0m"
 		;;
 	"clone")
 		echo -e ""
-		read -p "Repository to clone: " repoclone
+		read -p $'\e[1mRepository to clone: \e[0m' repoclone
 		echo -e ""
-		read -p "Repository owner: " repoowner
+		read -p $'\e[1mRepository owner: \e[0m' repoowner
 		echo -e ""
 		git clone https://github.com/"$repoowner"/"$repoclone".git
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Done!"
-		echo -e ""
+		echo -e "\e[0m"
 		;;
 	"status")
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Repository status:"
-		echo -e ""
+		echo -e "\e[0m"
 		git status
 		echo -e ""
 		;;
 	"bcreate")
 		echo -e ""
-		read -p "Branch to create: " branname
-		echo -e ""
+		read -p $'\e[1mName your new branch: \e[0m' branname
+		echo -e "\e[1m"
 		echo -e "Creating branch "$branname"..."
+		echo -e "\e[0m"
 		git branch "$branname"
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Done!"
-		echo -e ""
+		echo -e "\e[0m"
 		;;
 	"bremove")
 		echo -e ""
-		read -p "Branch to remove: " branname
-		echo -e ""
+		read -p $'\e[1mBranch to remove: \e[0m' branname
+		echo -e "\e[1m"
 		echo -e "Removing branch "$branname"..."
+		echo -e "\e[0m"
 		git branch -D "$branname"
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Done!"
-		echo -e ""
+		echo -e "\e[0m"
 		;;
 	"bswitch")
 		echo -e ""
-		read -p "Switch to branch: " branname
-		echo -e ""
+		read -p $'\e[1mBranch to switch: \e[0m' branname
+		echo -e "\e[1m"
 		echo -e "Switching to branch "$branname"..."
+		echo -e ""
 		git checkout "$branname"
-		echo -e ""
+		echo -e "\e[1m"
 		echo -e "Done!"
-		echo -e ""
+		echo -e "\e[0m"
 		;;
 esac

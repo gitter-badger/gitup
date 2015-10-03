@@ -11,10 +11,12 @@ if [ ! $(whoami) = root ];then
 	echo -e ""
 	exit
 else
-	echo -e ""
+	echo -e "\e[1m"
 	echo -e "Installing..."
-	cp {gitup} /usr/bin/
-	echo -e ""
+	echo -e "\e[0m"
+	cp gitup /usr/bin/
+	cp /functions/gitup.funcs /etc/gitup/gitup.funcs
+	echo -e "\e[1m"
 	echo -e "Done!"
-	echo -e ""
+	echo -e "\e[0m"
 fi
