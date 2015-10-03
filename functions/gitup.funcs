@@ -84,8 +84,7 @@ function chkgitf {
 		read -p $'\e[1mRepository name: \e[0m' reponame
 		echo -e "\e[1m"
 		echo -e "Adding remote origin...\e[0m"
-		git remote add 
-origin https://github.com/"$username"/"$reponame".git
+		git remote add origin https://github.com/"$username"/"$reponame".git
 		echo -e "\e[1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
