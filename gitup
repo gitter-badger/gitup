@@ -9,7 +9,7 @@
 if [ -f /etc/gitup/gitup.funcs ];then
         source /etc/gitup/gitup.funcs
         else
-        source $(pwd)/functions/gitup.funcs
+        source $(pwd)/gitup.funcs
 fi
 
 # lets start...
@@ -61,7 +61,7 @@ case $1 in
 		echo -e "Setting...\e[0m"
 		git config --global user.name "$username"
 		git config --global user.email "$usermail"
-		echo -e "\e[1m"
+		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
 		;;
@@ -74,7 +74,7 @@ case $1 in
 		echo -e "Setting...\e[0m"
 		git config --local user.name "$username"
 		git config --local user.email "$usermail"
-		echo -e "\e[1m"
+		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
 		;;
@@ -90,7 +90,7 @@ case $1 in
 		echo -e "\e[1m"
 		echo -e "Adding remote origin...\e[0m"
 		git remote add origin https://github.com/"$username"/"$reponame".git
-		echo -e "\e[1m"
+		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
 		;;
@@ -117,7 +117,7 @@ case $1 in
 		echo -e "\e[1m"
 		echo -e "Pushing to master branch...\e[0m"
 		git push -u origin master
-		echo -e "\e[1m"
+		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
 		;;
@@ -137,7 +137,7 @@ case $1 in
 		echo -e "\e[1m"
 		echo -e "Pushing to "$brapush" branch...\e[0m"
 		git push -u origin "$brapush"
-		echo -e "\e[1m"
+		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
 		;;
@@ -148,7 +148,7 @@ case $1 in
 		read -p $'\e[1mRepository owner: \e[0m' repoowner
 		echo -e ""
 		git clone https://github.com/"$repoowner"/"$repoclone".git
-		echo -e "\e[1m"
+		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
 		;;
@@ -164,7 +164,7 @@ case $1 in
 		echo -e "\e[1m"
 		echo -e "Creating branch "$branname"...\e[0m"
 		git branch "$branname"
-		echo -e "\e[1m"
+		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
 		;;
@@ -174,7 +174,7 @@ case $1 in
 		echo -e "\e[1m"
 		echo -e "Removing branch "$branname"...\e[0m"
 		git branch -D "$branname"
-		echo -e "\e[1m"
+		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
 		;;
@@ -184,7 +184,7 @@ case $1 in
 		echo -e "\e[1m"
 		echo -e "Switching to branch "$branname"...\e[0m"
 		git checkout "$branname"
-		echo -e "\e[1m"
+		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
 		;;

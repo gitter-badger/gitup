@@ -24,7 +24,7 @@ SELCONF="\"Set global configuration\" \"Set local configuration\""
 
 function chkconf {
 	if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ];then
-		echo -e "\e[1m"
+		echo -e "\e[31;1m"
 		echo -e "There is not any config file present.\e[0m"
 		echo -e "\e[1m"
 		echo -e "What configuration do you want to set?\e[0m"
@@ -39,7 +39,7 @@ function chkconf {
 				echo -e "Setting...\e[0m"
 				git config --global user.name "$username"
 				git config --global user.email "$usermail"
-				echo -e "\e[1m"
+				echo -e "\e[32;1m"
 				echo -e "Done!"
 				echo -e "\e[0m"
 				exit
@@ -52,7 +52,7 @@ function chkconf {
 				echo -e "Setting...\e[0m"
 				git config --local user.name "$username"
 				git config --local user.email "$usermail"
-				echo -e "\e[1m"
+				echo -e "\e[32;1m"
 				echo -e "Done!"
 				echo -e "\e[0m"
 				exit
@@ -85,7 +85,7 @@ function chkgitf {
 		echo -e "\e[1m"
 		echo -e "Adding remote origin...\e[0m"
 		git remote add origin https://github.com/"$username"/"$reponame".git
-		echo -e "\e[1m"
+		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
 	fi
