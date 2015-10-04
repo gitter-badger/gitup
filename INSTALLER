@@ -14,7 +14,8 @@ else
 	echo -e "\e[1m"
 	echo -e "Installing...\e[0m"
 	cp gitup /usr/bin/
-	cp /functions/gitup.funcs /etc/gitup/gitup.funcs
+	mkdir /etc/gitup/
+	cp gitup.funcs /etc/gitup/
 	echo -e "\e[1m"
 	echo -e "Done!"
 	echo -e "\e[0m"
