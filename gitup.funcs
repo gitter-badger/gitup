@@ -6,7 +6,7 @@
 
 ## checks if 'git' exists
 
-function chkgitb {
+chkgitb() {
 	if [ ! -f /usr/bin/git ];then
 		echo -e ""
 		echo -e "\e[31;1mERROR:\e[0m"
@@ -22,7 +22,7 @@ function chkgitb {
 
 SELCONF="\"Set global configuration\" \"Set local configuration\""
 
-function chkconf {
+chkconf() {
 	if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ];then
 		echo -e "\e[31;1m"
 		echo -e "There is not any config file present.\e[0m"
@@ -69,7 +69,7 @@ function chkconf {
 
 ## checks if any .git folder is present
 
-function chkgitf {
+chkgitf() {
 		if [ ! -d ./.git ];then
 		echo -e "\e[1m"
 		echo -e "There is not a .git folder present."
@@ -89,6 +89,52 @@ function chkgitf {
 		echo -e "Done!"
 		echo -e "\e[0m"
 	fi
+}
+
+## prints the help section
+
+prthelp() {
+	echo -e "\e[1m"
+	echo -e "Usage: gitup [OPTION]"
+	echo -e "\e[0m"
+	echo -e "List of options:"
+	echo -e ""
+	echo -e "Configuration:"
+	echo -e ""
+	echo -e "luconf				local user config"
+	echo -e "guconf				global user config"
+	echo -e ""
+	echo -e "Repository:"
+	echo -e ""
+	echo -e "init				inits git and adds the remote origin"
+	echo -e "rsetup				set-up a repository"
+	echo -e "commit				push a new commit"
+	echo -e "clone				clone a repository"
+	echo -e "status				see repository status"
+	echo -e ""
+	echo -e "Branches:"
+	echo -e ""
+	echo -e "bcreate				create a new branch"
+	echo -e "bremove				remove a branch"
+	echo -e "bswitch				switch between branches"
+	echo -e ""
+	echo -e "Pull requests:"
+	echo -e ""
+	echo -e "rfetch				Fetch data from a pull request"
+	echo -e ""
+}
+
+## prints the about section
+
+prtabut() {
+	echo -e "\e[1m"
+	echo -e "GitUp"
+	echo -e "The shell script that makes git easier."
+	echo -e ""
+	echo -e "Version: 0.2 "Drums""
+	echo -e "Website: https://github.com/feskyde/gitup"
+	echo -e "GitUp is released under the WTFPL license."
+	echo -e "\e[0m"
 }
 
 # end of functions #

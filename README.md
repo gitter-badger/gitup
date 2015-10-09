@@ -12,6 +12,14 @@ Just type `gitup` and see the magic...
 
 - [ ] Add more commands.
 
+## Releases
+
+Lastest: [0.2 "Drums"](https://github.com/feskyde/gitup/releases/tag/v0.2)
+
+Old:
+- [0.1 "Castanets"](https://github.com/feskyde/gitup/releases/tag/v0.1)
+ - [0.1.1 (Bugfixes)](https://github.com/feskyde/gitup/releases/tag/v0.1.1)
+
 ## Collaborations
 
 - @drpkg

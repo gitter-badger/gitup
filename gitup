@@ -16,41 +16,11 @@ fi
 
 chkgitb
 case $1 in
-	"help"|"")
-		echo -e "\e[1m"
-		echo -e "Usage: gitup [OPTION]"
-		echo -e "\e[0m"
-		echo -e "List of options:"
-		echo -e ""
-		echo -e "Configuration:"
-		echo -e ""
-		echo -e "luconf				local user config"
-		echo -e "guconf				global user config"
-		echo -e ""
-		echo -e "Repository:"
-		echo -e ""
-		echo -e "init				inits git and adds the remote origin"
-		echo -e "rsetup				set-up a repository"
-		echo -e "commit				push a new commit"
-		echo -e "clone				clone a repository"
-		echo -e "status				see repository status"
-		echo -e ""
-		echo -e "Branches:"
-		echo -e ""
-		echo -e "bcreate				create a new branch"
-		echo -e "bremove				remove a branch"
-		echo -e "bswitch				switch between branches"
-		echo -e ""
+	"help")
+		prthelp
 		;;
 	"about")
-		echo -e "\e[1m"
-		echo -e "GitUp:"
-		echo -e "A shell script to make git easier."
-		echo -e ""
-		echo -e "Version: 0.1 "Castanets""
-		echo -e "Website: https://github.com/feskyde/gitup"
-		echo -e "GitUp is released under the WTFPL license."
-		echo -e "\e[0m"
+		prtabut
 		;;
 	"guconf")
 		echo -e ""
@@ -99,13 +69,10 @@ case $1 in
 		echo -e "\e[1m"
 		echo -e "Initializing git on this repository...\e[0m"
 		git init
-		echo -e "\e[1m"
-		echo -e "Checking file changes...\e[0m"
-		git add .
-		echo -e ""
 		read -p $'\e[1mCommit message: \e[0m' commitm
 		echo -e "\e[1m"
-		echo -e "Adding message to commit...\e[0m"
+		echo -e "Adding file changes and message to commit...\e[0m"
+		git add .
 		git commit -m "$commitm"
 		echo -e ""
 		read -p $'\e[1mYour username: \e[0m' username
@@ -125,12 +92,10 @@ case $1 in
 		chkconf
 		chkgitf
 		echo -e "\e[1m"
-		echo -e "Checking file changes...\e[0m"
-		git add .
-		echo -e ""
 		read -p $'\e[1mCommit message: \e[0m' commitm
 		echo -e "\e[1m"
-		echo -e "Adding message to commit...\e[0m"
+		echo -e "Adding file changes and message to commit...\e[0m"
+		git add .
 		git commit -m "$commitm"
 		echo -e ""
 		read -p $'\e[1mBranch to push: \e[0m' brapush
@@ -187,5 +152,21 @@ case $1 in
 		echo -e "\e[32;1m"
 		echo -e "Done!"
 		echo -e "\e[0m"
+		;;
+	"rfetch")
+		echo -e ""
+		read -p $'\e[1mRequest ID: \e[0m' requid
+		echo -e ""
+		read -p $'\e[1mBranch: \e[0m' requbr
+		echo -e "\e[1m"
+		echo -e "Fetching files from the "$requbr" branch...\e[0m"
+		git fetch origin pull/"$requid"/head:"$requbr"
+		echo -e "\e[1m"
+		echo -e "Switching to branch "$requbr"...\e[0m"
+		git checkout "$requbr"
+		echo -e "\e[1m"
+		echo -e "When you think you're ready, you can push the new branch"
+		echo -e "using 'gitup commit' and setting the branch name to "$requbr"\e[0m"
+		echo -e ""
 		;;
 esac
