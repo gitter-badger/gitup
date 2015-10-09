@@ -37,7 +37,9 @@ Just type `gitup` and see the magic...
 #### Ubuntu (and derivates):
 
 GitUp is not compatible with Ubuntu and derivates because they not have the `source` command available for normal users.
+
 `source` is a Bash built-in command that is used in GitUp to use all the variables from the `gitup.funcs` file.
+
 GitUp will be still usable, but it will not make use of the functions included on the file mentioned above.
 
 ## Collaborations:
