@@ -106,7 +106,7 @@ prthelp() {
 	echo -e ""
 	echo -e "Repository:"
 	echo -e ""
-	echo -e "init				inits git and adds the remote origin"
+	echo -e "init				initializes git"
 	echo -e "rsetup				set-up a repository"
 	echo -e "commit				push a new commit"
 	echo -e "clone				clone a repository"
@@ -132,7 +132,7 @@ prtabut() {
 	echo -e "The shell script that makes git easier."
 	echo -e ""
 	echo -e "Version: 0.2 "Drums""
-	echo -e "Website: https://github.com/feskyde/gitup"
+	echo -e "Website: https://feskyde.github.io/gitup"
 	echo -e "GitUp is released under the WTFPL license."
 	echo -e "\e[0m"
 }
