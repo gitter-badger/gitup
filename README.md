@@ -43,25 +43,31 @@ Just type `gitup help` and see the magic...
 
 ### Upcoming:
 
-- [0.3 "Euphonium"](https://github.com/feskyde/gitup/releases/tag/v0.3-1 "Big changes are here!")
+- [0.4-1 "Flute"](www.youtube.com/watch?v=oHg5SJYRHA0 "Soon, my dear son, soon...")
 
 ### Lastest:
 
-- [0.2 "Drums"](https://github.com/feskyde/gitup/releases/tag/v0.2 "Sorry for this").
+- [0.3-1 "Euphonium"](https://github.com/feskyde/gitup/releases/tag/v0.3-1 "Big changes are here!")
   - Changes:
-    - Added `rfetch`, for fetching pull requests.
-    - Change the usage of functions to simple parenthesis.
-    - Moved `help` and `about` sections to functions file.
-  - Sorry for this release.
+    - Rewrite.
+    - Added a lot of new options.
+    - Added a brand new installer.
+    - Change of license.
 
 ### Old:
 
-- [0.1 "Castanets"](https://github.com/feskyde/gitup/releases/tag/v0.1 "First release!").
+- [0.2 "Drums"](https://github.com/feskyde/gitup/releases/tag/v0.2 "Sorry for this")
+  - Changes:
+    - Added option for fetching pull requests.
+    - Change the usage of functions to simple parenthesis.
+    - Moved `about` and `help` to functions file.
+
+- [0.1 "Castanets"](https://github.com/feskyde/gitup/releases/tag/v0.1 "First release!")
   - Changes:
     - **Bolded** input messages and script output.
     - Usage of functions.
-    - Rewrite the original GitUp commands
-  - And a bugfix
+    - Rewrite the original GitUp commands.
+  - And a bugfix.
 
 ## Collaborations:
 

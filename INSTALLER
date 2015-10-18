@@ -1,7 +1,5 @@
 #!/bin/sh
 
-#!/bin/sh
-
 # Universal Script Installer
 # Copyright (c) 2015, Federico Damián Schonborn <github.feskyde>
 # All rights reserved.
@@ -54,14 +52,15 @@ echo -e ""$NLINE""$BOLD"Usage: "$BINARY" "$ARGUMENTS""$COLEND""$NLINE""$OPTIONS_
 ## prints the about section
 
 print_about() {
-echo -e ""$NLINE""$BOLD""$PRETTY_NAME" ver. "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$DASH_RELEASE" \"$CODENAME\"
+echo -e ""$NLINE""$BOLD""$PRETTY_NAME" ver. "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$DASH_RELEASE" \"$CODENAME\".
 "$DESCRIPTION"
-"$PRETTY_NAME" is released under the "$LICENSE" license"$COLEND""$NLINE""
+"$PRETTY_NAME" is released under the "$LICENSE" license."$COLEND""$NLINE""
 }
 
 # set message prompt settings
 
 ERROR="\e[31;1m"
+DONE="\e[32;1m"
 BOLD="\e[1m"
 COLEND="\e[0m"
 NLINE="\n"
@@ -94,6 +93,7 @@ then
 	exit
 else
 	echo -e ""$NLINE""$ERROR""$INSTALL_PNAME" is NOT installed!"$COLEND""$NLINE""
+	exit
 fi
 }
 
@@ -122,7 +122,6 @@ case $1 in
 		check_root
 		echo -e ""$NLINE""$BOLD"Checking for "$INSTALL_PNAME"..."$COLEND""
 		check_installed
-		print_done
 		;;
 esac
 

@@ -24,18 +24,11 @@ LICENSE="BSD"
 DESCRIPTION="The shell script that makes git easier."
 WEBSITE="https://github.com/feskyde/gitup"
 
-### ASCII art
-### ISSUES: 'echo -e' prints this very buggy
-
-# for now, it gets disabled
-#ASCII=""
-
 ## help command info
 
 ARGUMENTS="[COMMAND]"
 
 ### options
-### ISSUES: you need to put an "\n" (or the $NLINE variable) on every new line
 
 OPTIONS_HEADER="\nList of options:"
 OPTIONS_LIST="
@@ -99,16 +92,15 @@ echo -e ""$NLINE""$BOLD"Usage: "$BINARY" "$ARGUMENTS""$COLEND""$NLINE""$OPTIONS_
 ## prints the about section
 
 print_about() {
-echo -e ""$NLINE""$BOLD""$PRETTY_NAME" ver. "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$DASH_RELEASE" \"$CODENAME\"
+echo -e ""$NLINE""$BOLD""$PRETTY_NAME" ver. "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$DASH_RELEASE" \"$CODENAME\".
 "$DESCRIPTION"
-Website: "$WEBSITE"
-"$PRETTY_NAME" is released under the "$LICENSE" license"$COLEND""$NLINE""
+Website: "$WEBSITE".
+"$PRETTY_NAME" is released under the "$LICENSE" license."$COLEND""$NLINE""
 }
 
 # pre-runtime functions
 
 ## checks git binary existence
-### ISSUE: you need to replace "$DEPENDS" with the dependant binary name on the function name (check_"$DEPENDS"bin)
 
 check_gitbin() {
 if [ ! -f /usr/bin/"$DEPENDS" ]
