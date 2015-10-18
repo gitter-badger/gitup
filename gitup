@@ -1,172 +1,301 @@
 #!/bin/sh
 
 # GitUp
-# Federico Damián Schonborn <github.com/feskyde>
-# License: WTFPL
 
-# search for functions on gitup.funcs file
+# Copyright (c) 2015, Federico Damián Schonborn <github.com/feskyde>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without modification,
+# are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, this
+# list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation and/or
+# other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its contributors
+# may be used to endorse or promote products derived from this software without
+# specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+# INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+# OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+# OF SUCH DAMAGE.
 
-if [ -f /etc/gitup/gitup.funcs ];then
-        source /etc/gitup/gitup.funcs
-        else
-        source $(pwd)/gitup.funcs
+# set script info
+
+NAME="GitUp"
+RELEASE="0.3-1"
+CODENAME="Euphonium"
+LICENSE="BSD"
+
+## about command info
+
+DESCRIPTION="The shell script that makes git easier."
+WEBSITE="https://github.com/feskyde/gitup"
+
+### ASCII art
+### ISSUES: 'echo -e' prints this very buggy (NEEDS TO BE FIXED)
+
+#ASCII=""
+
+## help command info
+
+BINARY="gitup"
+ARGUMENTS="[COMMAND]"
+
+### options
+### ISSUES: you need to put an "\n" on every new line (NEEDS TO BE FIXED)
+
+OPTIONS="\nList of options:
+\n
+\nConfiguration:
+\n
+\nlocal-config, lc			per repo user config
+\nglobal-config, gc			global user config
+\n
+\nRepository:
+\n
+\ninit, in				initializes git
+\nrepo-setup, rs				set-up a repository
+\ncommit, cm,				push a new commit
+\nclone, cl				clone a repository
+\nstatus, st				see repository status
+\n
+\nBranches:
+\n
+\nbranch-create, bc			create a new branch
+\nbranch-remove, br			remove a branch
+\nbranch-switch, bs			switch between branches
+\n
+\nPull requests:
+\n
+\nrequest-fetch, rf			Fetch data from a pull request\n"
+
+# set functions
+
+## checks if 'git' exists
+
+check_gitbin() {
+if [ ! -f /usr/bin/git ]
+then
+	echo -e "\e[31;1mERROR:\e[0m"
+	echo -e "\e[1mCommand git not found."
+	echo -e "Please check your installation.\e[0m"
 fi
+}
 
-# lets start...
+## checks if any configuration file is present
 
-chkgitb
+SELECT_CONFIG="\"Set global configuration\" \"Set local configuration\""
+
+check_config() {
+if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ]
+then
+	echo -e "\e[31;1mThere is not any config file present.\e[0m"
+	echo -e "\e[1mWhat configuration do you want to set?\e[0m"
+	eval set $SELECT_CONFIG
+	select opt in "$@";do
+		if [ "$opt" = "Set global configuration" ]
+		then
+			set_config
+			git config --global user.name "$user_name"
+			git config --global user.email "$user_email"
+			print_done
+		elif [ "$opt" = "Set local configuration" ]
+		then
+			set_config
+			git config --local user.name "$user_name"
+			git config --local user.email "$user_email"
+			print_done
+		else
+			echo -e "\e[31;1mERROR:"
+			echo -e "INVALID OPTION!\e[0m"
+		fi
+	done
+fi
+}
+
+## function for global-config and local-config
+
+set_config() {
+read -p $'\e[1mYour username: \e[0m' user_name
+read -p $'\e[1mYour email: \e[0m' user_email
+echo -e "\e[1m"
+echo -e "Setting...\e[0m"
+}
+
+## function for commits
+make_commit() {
+read -p $'\e[1mCommit message: \e[0m' commit_message
+echo -e "\e[1m"
+echo -e "Adding file changes and message to commit...\e[0m"
+git commit -a -m "$commit_message"
+}
+
+## reads user_name and repo_name
+
+read_names() {
+read -p $'\e[1mYour username: \e[0m' user_name
+read -p $'\e[1mRepository name: \e[0m' repo_name
+}
+
+## checks if any .git folder is present
+
+check_folder() {
+	if [ ! -d ./.git ]
+	then
+		echo -e "\e[1m"
+		echo -e "There is not a .git folder present."
+		echo -e "Running repo-setup..."
+		git_init
+		read_names
+		echo -e "Adding remote origin...\e[0m"
+		git remote add origin https://github.com/"$user_name"/"$repo_name".git
+		print_done
+fi
+}
+
+## initializes git
+
+git_init() {
+echo -e "\n Initializing git...\e[0m"
+git init
+}
+
+## see repo status
+
+git_status() {
+echo -e "\e[1mRepository status:\e[0m"
+git status
+}
+
+## prints the help section
+
+print_help() {
+echo -e "\n\e[1mUsage: "$BINARY" "$ARGUMENTS"\e[0m\n
+"$OPTIONS""
+}
+
+## prints the about section
+
+print_about() {
+echo -e "\n\e[1m"$NAME"
+"$DESCRIPTION"
+Version: "$RELEASE" "\"$CODENAME\""
+Website: "$WEBSITE"
+"$NAME" is released under the "$LICENSE" license\e[0m\n"
+}
+
+## prints the 'Done! message'
+
+print_done() {
+	echo -e "\e[32;1m"
+	echo -e "Done!"
+	echo -e "\e[0m"
+}
+
+# search for git binary
+
+check_gitbin
+
+# set commands
+
 case $1 in
 	"help")
-		prthelp
+		print_help
 		;;
 	"about")
-		prtabut
+		print_about
 		;;
-	"guconf")
-		echo -e ""
-		read -p $'\e[1mYour username: \e[0m' username
-		echo -e ""
-		read -p $'\e[1mYour email: \e[0m' usermail
-		echo -e "\e[1m"
-		echo -e "Setting...\e[0m"
-		git config --global user.name "$username"
-		git config --global user.email "$usermail"
-		echo -e "\e[32;1m"
-		echo -e "Done!"
-		echo -e "\e[0m"
+	"global-config"|"gc")
+		set_config
+		git config --global user.name "$user_name"
+		git config --global user.email "$user_email"
+		print_done
 		;;
-	"luconf")
-		echo -e ""
-		read -p $'\e[1mYour username: \e[0m' username
-		echo -e ""
-		read -p $'\e[1mYour email: \e[0m' usermail
-		echo -e "\e[1m"
-		echo -e "Setting...\e[0m"
-		git config --local user.name "$username"
-		git config --local user.email "$usermail"
-		echo -e "\e[32;1m"
-		echo -e "Done!"
-		echo -e "\e[0m"
+	"local-config"|"lc")
+		set_config
+		git config --local user.name "$user_name"
+		git config --local user.email "$user_email"
+		print_done
 		;;
-	"init")
-		chkconf
-		echo -e "\e[1m"
-		echo -e "Initializing git...\e[0m"
-		git init
-		echo -e ""
-		read -p $'\e[1mYour username: \e[0m' username
-		echo -e ""
-		read -p $'\e[1mRepository name: \e[0m' reponame
-		echo -e "\e[1m"
+	"init"|"in")
+		check_config
+		git_init
+		make_commit
+		read_names
 		echo -e "Adding remote origin...\e[0m"
-		git remote add origin https://github.com/"$username"/"$reponame".git
-		echo -e "\e[32;1m"
-		echo -e "Done!"
-		echo -e "\e[0m"
+		git remote add origin https://github.com/"$user_name"/"$repo_name".git
+		print_done
 		;;
-	"rsetup")
-		chkconf
-		echo -e "\e[1m"
-		echo -e "Initializing git on this repository...\e[0m"
-		git init
-		read -p $'\e[1mCommit message: \e[0m' commitm
-		echo -e "\e[1m"
-		echo -e "Adding file changes and message to commit...\e[0m"
-		git add .
-		git commit -m "$commitm"
-		echo -e ""
-		read -p $'\e[1mYour username: \e[0m' username
-		echo -e ""
-		read -p $'\e[1mRepository name: \e[0m' reponame
-		echo -e "\e[1m"
+	"repo-setup"|"rs")
+		check_config
+		git_init
+		make_commit
+		read_names
 		echo -e "Adding remote origin...\e[0m"
-		git remote add origin https://github.com/"$username"/"$reponame".git
-		echo -e "\e[1m"
+		git remote add origin https://github.com/"$user_name"/"$repo_name".git
 		echo -e "Pushing to master branch...\e[0m"
 		git push -u origin master
-		echo -e "\e[32;1m"
-		echo -e "Done!"
-		echo -e "\e[0m"
+		print_done
 		;;
-	"commit")
-		chkconf
-		chkgitf
-		echo -e "\e[1m"
-		read -p $'\e[1mCommit message: \e[0m' commitm
-		echo -e "\e[1m"
-		echo -e "Adding file changes and message to commit...\e[0m"
-		git add .
-		git commit -m "$commitm"
-		echo -e ""
-		read -p $'\e[1mBranch to push: \e[0m' brapush
-		echo -e "\e[1m"
-		echo -e "Pushing to "$brapush" branch...\e[0m"
-		git push -u origin "$brapush"
-		echo -e "\e[32;1m"
-		echo -e "Done!"
-		echo -e "\e[0m"
+	"commit"|"cm")
+		check_config
+		check_folder
+		make_commit
+		read -p $'\e[1mBranch to push: \e[0m' branch_push
+		echo -e "\e[1mPushing to "$branch_push" branch...\e[0m"
+		git push -u origin "$branch_push"
+		print_done
 		;;
-	"clone")
-		echo -e ""
-		read -p $'\e[1mRepository to clone: \e[0m' repoclone
-		echo -e ""
-		read -p $'\e[1mRepository owner: \e[0m' repoowner
-		echo -e ""
-		git clone https://github.com/"$repoowner"/"$repoclone".git
-		echo -e "\e[32;1m"
-		echo -e "Done!"
-		echo -e "\e[0m"
+	"clone"|"cl")
+		read -p $'\n\e[1mRepository to clone: \e[0m' repo_clone
+		read -p $'\n\e[1mRepository owner: \e[0m' repo_owner
+		git clone https://github.com/"$repo_owner"/"$repo_clone".git
+		print_done
 		;;
-	"status")
-		echo -e "\e[1m"
-		echo -e "Repository status:\e[0m"
-		git status
-		echo -e ""
+	"status"|"st")
+		git_status
+		print_done
 		;;
-	"bcreate")
-		echo -e ""
-		read -p $'\e[1mName your new branch: \e[0m' branname
-		echo -e "\e[1m"
-		echo -e "Creating branch "$branname"...\e[0m"
-		git branch "$branname"
-		echo -e "\e[32;1m"
-		echo -e "Done!"
-		echo -e "\e[0m"
+	"branch-create"|"bc")
+		read -p $'\e[1mName your new branch: \e[0m' branch_name
+		echo -e "\e[1mCreating branch "$branch_name"...\e[0m"
+		git branch "$branch_name"
+		print_done
 		;;
-	"bremove")
-		echo -e ""
-		read -p $'\e[1mBranch to remove: \e[0m' branname
-		echo -e "\e[1m"
-		echo -e "Removing branch "$branname"...\e[0m"
-		git branch -D "$branname"
-		echo -e "\e[32;1m"
-		echo -e "Done!"
-		echo -e "\e[0m"
+	"branch-remove"|"br")
+		read -p $'\e[1mBranch to remove: \e[0m' branch_name
+		echo -e "\e[1mRemoving branch "$branch_name"...\e[0m"
+		git branch -D "$branch_name"
+		print_done
 		;;
-	"bswitch")
-		echo -e ""
-		read -p $'\e[1mBranch to switch: \e[0m' branname
-		echo -e "\e[1m"
-		echo -e "Switching to branch "$branname"...\e[0m"
-		git checkout "$branname"
-		echo -e "\e[32;1m"
-		echo -e "Done!"
-		echo -e "\e[0m"
+	"branch-switch"|"bs")
+		read -p $'\e[1mBranch to switch: \e[0m' branch_name
+		echo -e "\e[1mSwitching to branch "$branch_name"...\e[0m"
+		git checkout "$branch_name"
+		print_done
 		;;
-	"rfetch")
-		echo -e ""
-		read -p $'\e[1mRequest ID: \e[0m' requid
-		echo -e ""
-		read -p $'\e[1mBranch: \e[0m' requbr
-		echo -e "\e[1m"
-		echo -e "Fetching files from the "$requbr" branch...\e[0m"
-		git fetch origin pull/"$requid"/head:"$requbr"
-		echo -e "\e[1m"
-		echo -e "Switching to branch "$requbr"...\e[0m"
-		git checkout "$requbr"
-		echo -e "\e[1m"
-		echo -e "When you think you're ready, you can push the new branch"
-		echo -e "using 'gitup commit' and setting the branch name to "$requbr"\e[0m"
-		echo -e ""
+	"request-fetch"|"rf")
+		read -p $'\e[1mRequest ID: \e[0m' request_id
+		read -p $'\e[1mBranch: \e[0m' request_branch
+		echo -e "\e[1mFetching files from the "$request_branch" branch...\e[0m"
+		git fetch origin pull/"$request_id"/head:"$request_branch"
+		echo -e "\e[1mSwitching to branch "$request_branch"...\e[0m"
+		git checkout "$request_branch"
+		echo -e "\e[1mWhen you think you're ready, you can push the new branch"
+		echo -e "using 'gitup commit' and setting the branch name to "$request_branch"\e[0m"
+		print_done
 		;;
 esac
+
+# end of script
