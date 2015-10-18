@@ -41,26 +41,40 @@ OPTIONS_HEADER="\nList of options:"
 OPTIONS_LIST="
 \nConfiguration:
 \n
-\nlocal-config, gc: per repo user config
-\nglobal-config, gc: global user config
+\nlc, local-config: local user config
+\ngc, global-config: global user config
 \n
 \nRepository:
 \n
-\ninit, in: initializes git
-\nrepo-setup, rs: set-up repository
-\ncommit, cm,: push new commit
-\nclone, cl: clone repository
-\nstatus, st: repository status
+\nin, init: initializes git
+\nrs, repo-setup: set-up a repository
+\ncm, commit: push a new commit
+\ncl, clone: clone a repository
+\nfc, fetch: fetches not present objects from remote
+\ngb, garbage-collector: optimizes your repository
+\ncf, check-filesystem: do an integrity check of repository
+\nrt, reset: reset directory to lastest commit
+\n
+\nStatus:
+\n
+\nst, status: see repository status
+\nlg, log: see all commits
+\n
+\nFiles:
+\nlt, ls-tree: see a tree of files form a branch
+\ndf, diff: see diff between files
+\ngp, grep: search a string on all files
 \n
 \nBranches:
 \n
-\nbranch-create, bc: create a branch
-\nbranch-remove, br: remove a branch
-\nbranch-switch, bs: switch to branch
+\nbc, branch-create: create a branch
+\nbr, branch-remove: remove a branch
+\nbs, branch-switch: switch to a branch
+\nmg, merge: merge two branches
 \n
 \nPull requests:
 \n
-\nrequest-fetch, rf: Fetch pull request data"
+\nrf, request-fetch: Fetch pull request data"
 
 # set message prompt settings
 
@@ -113,8 +127,9 @@ SELECT_CONFIG="\"Set global configuration\" \"Set local configuration\""
 check_config() {
 if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ]
 then
-	echo -e ""$NLINE""$ERROR"There is not any config file present."$COLEND""$NLINE""
-	echo -e ""$NLINE"$BOLD""What configuration do you want to set?"$COLEND""$NLINE""
+	echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
+	echo -e ""$NLINE""$BOLD"There is not any config file present."$COLEND""$NLINE""
+	echo -e ""$NLINE""$BOLD"What configuration do you want to set?"$COLEND""$NLINE""
 	eval set $SELECT_CONFIG
 	select opt in "$@";do
 		if [ "$opt" = "Set global configuration" ]
@@ -130,7 +145,8 @@ then
 			git config --local user.email "$user_email"
 			print_done
 		else
-			echo -e ""$NLINE""$ERROR"ERROR: INVALID OPTION!"$COLEND""$NLINE""
+			echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
+			echo -e ""$NLINE""$BOLD"Invalid option."$COLEND""$NLINE""
 		fi
 	done
 fi
@@ -141,6 +157,7 @@ fi
 check_folder() {
 	if [ ! -d ./.git ]
 	then
+		echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
 		echo -e ""$NLINE""$BOLD"There is not a .git folder present."$COLEND""$NLINE""
 		echo -e ""$NLINE""$BOLD"Running repo-setup..."$COLEND""$NLINE""
 		git_init
@@ -160,11 +177,22 @@ echo -e ""$NLINE""$BOLD"Setting..."$COLEND""
 }
 
 ## function for commits
+
 make_commit() {
 read -p $'\n\e[1mCommit message: \e[0m' commit_message
 echo -e ""$NLINE""$BOLD"Adding file changes to commit..."$COLEND""
 git add .
 git commit -m "$commit_message"
+}
+
+## function for tags
+
+make_tag() {
+read -p $'\n\e[1mTag message: \e[0m' tag_message
+read -p $'\n\e[1mTag version: \e[0m' tag_version
+echo -e ""$NLINE""$BOLD"Adding file changes to new tag..."$COLEND""
+git add .
+git tag -a "$tag_version" -m "$tag_message"
 }
 
 ## reads user_name and repo_name
@@ -196,12 +224,11 @@ print_done() {
 	echo -e ""$NLINE""$DONE"Done!"$COLEND""$NLINE""
 }
 
-
 # pre-runtime check
 
 ## checks if git binary exists
 
-check_"$DEPENDS"bin
+check_gitbin
 
 # start of case (commands)
 
@@ -253,14 +280,58 @@ case $1 in
 		git push -u origin "$branch_push"
 		print_done
 		;;
+	"tag"|"tg")
+		check_config
+		check_folder
+		make_tag
+		read -p $'\n\e[1mBranch to push: \e[0m' branch_push
+		echo -e ""$NLINE""$BOLD"Pushing to "$branch_push" branch..."$COLEND""$NLINE""
+		git push -u origin "$branch_push"
+		print_done
+		;;
 	"clone"|"cl")
 		read -p $'\n\e[1mRepository to clone: \e[0m' repo_clone
 		read -p $'\n\e[1mRepository owner: \e[0m' repo_owner
 		git clone https://github.com/"$repo_owner"/"$repo_clone".git
 		print_done
 		;;
+	"fetch"|"fc")
+		git fetch origin
+		print_done
+		;;
+	"garbage-collector"|"gb")
+		git gc
+		print_done
+		;;
+	"check-filesystem"|"cf")
+		git fsck
+		print_done
+		;;
+	"reset"|"rt")
+		git reset --hard HEAD
+		print_done
+		;;
 	"status"|"st")
 		git_status
+		print_done
+		;;
+	"log"|"lg")
+		git log
+		print_done
+		;;
+	"ls-tree"|"lt")
+		read -p $'\n\e[1mBranch to show: \e[0m' branch_name
+		echo -e ""$NLINE""$BOLD"Showing branch "$branch_name"..."$COLEND""$NLINE""
+		git ls-tree "$branch_name"
+		print_done
+		;;
+	"diff"|"df")
+		git diff
+		print_done
+		;;
+	"grep"|"gp")
+		read -p $'\n\e[1mString to search: \e[0m' search_string
+		git grep "$search_string"
 		print_done
 		;;
 	"branch-create"|"bc")
@@ -279,6 +350,12 @@ case $1 in
 		read -p $'\n\e[1mBranch to switch: \e[0m' branch_name
 		echo -e ""$NLINE""$BOLD"Switching to branch "$branch_name"..."$COLEND""$NLINE""
 		git checkout "$branch_name"
+		print_done
+		;;
+	"merge"|"mg")
+		read -p $'\n\e[1mBranch to merge: \e[0m' branch_name
+		echo -e ""$NLINE""$BOLD"Merging..."$COLEND""$NLINE""
+		git merge "$branch_name"
 		print_done
 		;;
 	"request-fetch"|"rf")
