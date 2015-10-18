@@ -76,4 +76,4 @@ If you can donate some bits of code for fixing those issues, make a pull request
 
 ## License:
 
-GitUp is distributed under the BSD 3-Clause license, for further information see [LICENSE](../blob/master/LICENSE) file.
+GitUp is distributed under the BSD 3-Clause license, for further information see [LICENSE](../master/LICENSE) file.
