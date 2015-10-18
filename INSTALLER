@@ -1,18 +1,129 @@
 #!/bin/sh
 
-# GitUp - INSTALLER
+#!/bin/sh
 
-if [ ! $(whoami) = root ];then
-	echo -e "\e[31;1mERROR:\e[0m"
-	echo -e "\e[1mYou cannot install GitUp."
-	echo -e "Check if you are the root user.\e[0m"
-	echo -e "\e[31;1mERROR CODE: 0\e[0m"
+# Universal Script Installer
+# Copyright (c) 2015, Federico Damián Schonborn <github.feskyde>
+# All rights reserved.
+
+# script-skeleton (https://github.com/feskyde/script-skeleton)
+
+## set script info
+
+PRETTY_NAME="Universal Script Installer"
+BINARY="INSTALLER"
+MAYOR_RELEASE="0"
+MINOR_RELEASE="1"
+DASH_RELEASE="1"
+CODENAME="Pop"
+
+# USI information
+
+INSTALL_PNAME="GitUp"
+INSTALL_BINARY="gitup"
+INSTALL_LOCATION=/usr/bin/
+
+# license(s)
+
+LICENSE="BSD"
+
+## about command info
+
+DESCRIPTION="A script for installing scripts, basically."
+
+## help command info
+
+ARGUMENTS=""
+
+### options
+### ISSUES: you need to put an "\n" (or the $NLINE variable) on every new line
+
+OPTIONS_HEADER="\nList of options:"
+OPTIONS_LIST="
+\nOptional:
+\n
+\nuninstall: uninstalls the script
+\ncheck: checks if script is installed"
+
+## prints the help section
+
+print_help() {
+echo -e ""$NLINE""$BOLD"Usage: "$BINARY" "$ARGUMENTS""$COLEND""$NLINE""$OPTIONS_HEADER""$NLINE""$OPTIONS_LIST""$NLINE""
+}
+
+## prints the about section
+
+print_about() {
+echo -e ""$NLINE""$BOLD""$PRETTY_NAME" ver. "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$DASH_RELEASE" \"$CODENAME\"
+"$DESCRIPTION"
+"$PRETTY_NAME" is released under the "$LICENSE" license"$COLEND""$NLINE""
+}
+
+# set message prompt settings
+
+ERROR="\e[31;1m"
+BOLD="\e[1m"
+COLEND="\e[0m"
+NLINE="\n"
+
+# post-runtime functions
+
+## prints the 'Done! message'
+
+print_done() {
+	echo -e ""$NLINE""$DONE"Done!"$COLEND""$NLINE""
+}
+
+# pre-runtime checks
+
+check_root() {
+if [ ! $(whoami) = root ]
+then
+	echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
+	echo -e ""$BOLD"You are not root. "$INSTALL_PNAME" will not be installed."$COLEND""$NLINE""
+	exit
+fi
+}
+
+# runtime checks
+
+check_installed() {
+if [ -f "$INSTALL_LOCATION""$INSTALL_BINARY" ]
+then
+	echo -e ""$NLINE""$DONE""$INSTALL_PNAME" is installed!"$COLEND""$NLINE""
 	exit
 else
-	echo -e "\e[1m"
-	echo -e "Installing...\e[0m"
-	cp gitup /usr/bin/gitup
-	echo -e "\e[1m"
-	echo -e "Done!"
-	echo -e "\e[0m"
+	echo -e ""$NLINE""$ERROR""$INSTALL_PNAME" is NOT installed!"$COLEND""$NLINE""
 fi
+}
+
+# start of case (options)
+
+case $1 in
+	"about")
+		print_about
+		;;
+	"help")
+		print_help
+		;;
+	"")
+		check_root
+		echo -e ""$NLINE""$BOLD"Installing..."$COLEND""
+		cp "$INSTALL_BINARY" "$INSTALL_LOCATION""$INSTALL_BINARY"
+		print_done
+		;;
+	"uninstall")
+		check_root
+		echo -e ""$NLINE""$BOLD"Uninstalling..."$COLEND""
+		rm -rf "$INSTALL_LOCATION""$INSTALL_BINARY"
+		print_done
+		;;
+	"check")
+		check_root
+		echo -e ""$NLINE""$BOLD"Checking for "$INSTALL_PNAME"..."$COLEND""
+		check_installed
+		print_done
+		;;
+esac
+
+# end of script

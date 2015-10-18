@@ -9,6 +9,7 @@
 ## set script info
 
 PRETTY_NAME="GitUp"
+BINARY="gitup"
 MAYOR_RELEASE="0"
 MINOR_RELEASE="3"
 DASH_RELEASE="1"
@@ -31,7 +32,6 @@ WEBSITE="https://github.com/feskyde/gitup"
 
 ## help command info
 
-BINARY="gitup"
 ARGUMENTS="[COMMAND]"
 
 ### options
@@ -99,17 +99,16 @@ echo -e ""$NLINE""$BOLD"Usage: "$BINARY" "$ARGUMENTS""$COLEND""$NLINE""$OPTIONS_
 ## prints the about section
 
 print_about() {
-echo -e ""$NLINE""$BOLD""$PRETTY_NAME" ver. "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$DASH_RELEASE" \"$CODENAME\""
-echo -e ""$DESCRIPTION""
-echo -e "Website: "$WEBSITE""
-echo -e ""$PRETTY_NAME" is released under the "$LICENSE" license"$COLEND""$NLINE""
+echo -e ""$NLINE""$BOLD""$PRETTY_NAME" ver. "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$DASH_RELEASE" \"$CODENAME\"
+"$DESCRIPTION"
+Website: "$WEBSITE"
+"$PRETTY_NAME" is released under the "$LICENSE" license"$COLEND""$NLINE""
 }
 
 # pre-runtime functions
 
 ## checks git binary existence
-
-### ISSUE: you need to replace "$DEPENDS" with the dependant binary name ONLY on the function name (check_"$DEPENDS"bin), in the pre-runtime check above is it not neccesary
+### ISSUE: you need to replace "$DEPENDS" with the dependant binary name on the function name (check_"$DEPENDS"bin)
 
 check_gitbin() {
 if [ ! -f /usr/bin/"$DEPENDS" ]
@@ -365,8 +364,7 @@ case $1 in
 		git fetch origin pull/"$request_id"/head:"$request_branch"
 		echo -e ""$NLINE""$BOLD"Switching to branch "$request_branch"..."$COLEND""$NLINE""
 		git checkout "$request_branch"
-		echo -e ""$NLINE""$BOLD"When you think you're ready, you can push the new branch"$COLEND""
-		echo -e ""$BOLD"using 'gitup commit' and setting the branch name to "$request_branch""$COLEND""$NLINE""
+		echo -e ""$NLINE""$BOLD"When you think you're ready, you can push the new branch using 'gitup commit' and setting the branch name to "$request_branch""$COLEND""$NLINE""
 		print_done
 		;;
 esac
