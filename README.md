@@ -34,8 +34,9 @@ Just type `gitup help` and see the magic...
 
 ## TO-DO:
 
-- [ ] Add more commands.
+- [x] Add more commands.
 - [ ] Fix known issues.
+- [ ] Some "eyecandy"
 
 ## Releases:
 
@@ -45,7 +46,7 @@ Just type `gitup help` and see the magic...
 
 ### Lastest:
 
-- [0.2 "Drums"](https://..releases/tag/v0.2 "Sorry for this").
+- [0.2 "Drums"](/releases/tag/v0.2 "Sorry for this").
   - Changes:
     - Added `rfetch`, for fetching pull requests.
     - Change the usage of functions to simple parenthesis.
@@ -54,7 +55,7 @@ Just type `gitup help` and see the magic...
 
 ### Old:
 
-- [0.1 "Castanets"](https://../releases/tag/v0.1 "First release!").
+- [0.1 "Castanets"](/releases/tag/v0.1 "First release!").
   - Changes:
     - **Bolded** input messages and script output.
     - Usage of functions.
