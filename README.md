@@ -6,7 +6,7 @@ The shell script that makes `git` easier.
 
 As GitUp is a very simple script, it depends on only two packages:
 
-- A shell interpreter (as `bash`, `zsh`, `dash` or `fish`).
+- A `bash` compatible command-line interpreter (as `zsh`, `dash` or `fish`).
 - `git`
 
 ## Installation:
@@ -37,7 +37,11 @@ Just type `gitup help` and see the magic...
 ## TO-DO:
 
 - [x] Add more commands.
-- [ ] Some "eyecandy"
+- [x] Some "eyecandy".
+- [ ] CLI (`gitup-cli`).
+- [ ] Fixes on Debian.
+- [ ] Make this script available for other `git` solutions (GitLab and such).
+- [ ] Make packages for other distros.
 
 ## Releases:
 
@@ -53,6 +57,7 @@ Just type `gitup help` and see the magic...
     - Added a lot of new options.
     - Added a brand new installer.
     - Change of license.
+  - [Cleanups](https://github.com/feskyde/gitup/releases/tag/v0.3-2)
 
 ### Old:
 
@@ -67,7 +72,7 @@ Just type `gitup help` and see the magic...
     - **Bolded** input messages and script output.
     - Usage of functions.
     - Rewrite the original GitUp commands.
-  - And a bugfix.
+  - And a [bugfix](https://github.com/feskyde/gitup/releases/tag/v0.1.1).
 
 ## Collaborations:
 
