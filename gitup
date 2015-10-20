@@ -1,37 +1,31 @@
-#!/bin/sh
+#!/bin/bash
 
 # GitUp
 # Copyright (c) 2015, Federico Damián Schonborn <github.com/feskyde>
 # All rights reserved.
 
-# script-skeleton (https://github.com/feskyde/script-skeleton)
-
 ## set script info
 
-PRETTY_NAME="GitUp"
-BINARY="gitup"
+NAME="GitUp"
+DESCRIPTION="The bash script that makes 'git' easier."
+COMMAND="gitup"
+
 MAYOR_RELEASE="0"
 MINOR_RELEASE="3"
-DASH_RELEASE="1"
+DASH_RELEASE="2 (Cleanup release)"
 CODENAME="Euphonium"
 
-## license(s)
- 
 LICENSE="BSD"
 
-## about command info
-
-DESCRIPTION="The shell script that makes git easier."
 WEBSITE="https://github.com/feskyde/gitup"
 
-## help command info
+## help information
 
 ARGUMENTS="[COMMAND]"
 
-### options
-
-OPTIONS_HEADER="\nList of options:"
 OPTIONS_LIST="
+\nList of options:
+\n
 \nConfiguration:
 \n
 \nlc, local-config: local user config
@@ -77,67 +71,61 @@ BOLD="\e[1m"
 COLEND="\e[0m"
 NLINE="\n"
 
-# dependencies
-
-DEPENDS="git"
-
 # help and about sections
 
 ## prints the help section
 
 print_help() {
-echo -e ""$NLINE""$BOLD"Usage: "$BINARY" "$ARGUMENTS""$COLEND""$NLINE""$OPTIONS_HEADER""$NLINE""$OPTIONS_LIST""$NLINE""
+echo -e ""$NLINE""$BOLD"Usage: "$COMMAND" "$ARGUMENTS""$COLEND""$NLINE""$OPTIONS_LIST""$NLINE""
 }
 
 ## prints the about section
 
 print_about() {
-echo -e ""$NLINE""$BOLD""$PRETTY_NAME" ver. "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$DASH_RELEASE" \"$CODENAME\".
+echo -e ""$NLINE""$BOLD""$NAME" version "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$DASH_RELEASE" \"$CODENAME\".
 "$DESCRIPTION"
 Website: "$WEBSITE".
-"$PRETTY_NAME" is released under the "$LICENSE" license."$COLEND""$NLINE""
+"$NAME" is under the "$LICENSE" license."$COLEND""$NLINE""
 }
 
 # pre-runtime functions
 
-## checks git binary existence
+## checks git existence
 
 check_gitbin() {
-if [ ! -f /usr/bin/"$DEPENDS" ]
+if [ ! -f /usr/bin/git ]
 then
 	echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
-	echo -e ""$BOLD"Command "$DEPENDS" not found. Please check your installation."$COLEND""$NLINE""
+	echo -e ""$BOLD"'git' is not found!"$COLEND""$NLINE""
 	exit
 fi
 }
 
 # check if global and local configurations are setted
 
-SELECT_CONFIG="\"Set global configuration\" \"Set local configuration\""
+SELECT_CONFIG="\"Global\" \"Local\""
 
 check_config() {
 if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ]
 then
 	echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
-	echo -e ""$NLINE""$BOLD"There is not any config file present."$COLEND""$NLINE""
+	echo -e ""$NLINE""$BOLD"There is not any config file!"$COLEND""$NLINE""
 	echo -e ""$NLINE""$BOLD"What configuration do you want to set?"$COLEND""$NLINE""
 	eval set $SELECT_CONFIG
 	select opt in "$@";do
-		if [ "$opt" = "Set global configuration" ]
+		if [ "$opt" = "Global" ]
 		then
 			set_config
-			git config --global user.name "$user_name"
-			git config --global user.email "$user_email"
-			print_done
-		elif [ "$opt" = "Set local configuration" ]
+			global_config
+			print_finished
+		elif [ "$opt" = "Local" ]
 		then
 			set_config
-			git config --local user.name "$user_name"
-			git config --local user.email "$user_email"
-			print_done
+			local_config
+			print_finished
 		else
 			echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
-			echo -e ""$NLINE""$BOLD"Invalid option."$COLEND""$NLINE""
+			echo -e ""$NLINE""$BOLD"Invalid option!"$COLEND""$NLINE""
 		fi
 	done
 fi
@@ -149,29 +137,39 @@ check_folder() {
 	if [ ! -d ./.git ]
 	then
 		echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
-		echo -e ""$NLINE""$BOLD"There is not a .git folder present."$COLEND""$NLINE""
+		echo -e ""$NLINE""$BOLD"There is not a .git folder present!"$COLEND""$NLINE""
 		echo -e ""$NLINE""$BOLD"Running repo-setup..."$COLEND""$NLINE""
 		git_init
 		read_names
-		echo -e ""$NLINE""$BOLD"Adding remote origin..."$COLEND""$NLINE""
+		echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""
 		git remote add origin https://github.com/"$user_name"/"$repo_name".git
-		print_done
+		print_finished
 fi
 }
 
 # runtime functions
 
 set_config() {
-read -p $'\n\e[1mYour real name: \e[0m' user_name
-read -p $'\n\e[1mYour e-mail: \e[0m' user_email
-echo -e ""$NLINE""$BOLD"Setting..."$COLEND""
+read -p $'\n\e[1mReal name: \e[0m' user_name
+read -p $'\n\e[1mEmail: \e[0m' user_email
+echo -e ""$NLINE""$BOLD"Setting up..."$COLEND""
+}
+
+global_config() {
+git config --global user.name "$user_name"
+git config --global user.email "$user_email"
+}
+
+local_config() {
+git config --local user.name "$user_name"
+git config --local user.email "$user_email"
 }
 
 ## function for commits
 
 make_commit() {
 read -p $'\n\e[1mCommit message: \e[0m' commit_message
-echo -e ""$NLINE""$BOLD"Adding file changes to commit..."$COLEND""
+echo -e ""$NLINE""$BOLD"Adding files to commit..."$COLEND""
 git add .
 git commit -m "$commit_message"
 }
@@ -179,9 +177,9 @@ git commit -m "$commit_message"
 ## function for tags
 
 make_tag() {
-read -p $'\n\e[1mTag message: \e[0m' tag_message
 read -p $'\n\e[1mTag version: \e[0m' tag_version
-echo -e ""$NLINE""$BOLD"Adding file changes to new tag..."$COLEND""
+read -p $'\n\e[1mTag message: \e[0m' tag_message
+echo -e ""$NLINE""$BOLD"Adding files to tag '"$tag_version"'..."$COLEND""
 git add .
 git tag -a "$tag_version" -m "$tag_message"
 }
@@ -189,21 +187,21 @@ git tag -a "$tag_version" -m "$tag_message"
 ## reads user_name and repo_name
 
 read_names() {
-read -p $'\n\e[1mYour username: \e[0m' user_name
+read -p $'\n\e[1mUser name: \e[0m' user_name
 read -p $'\n\e[1mRepository name: \e[0m' repo_name
 }
 
 ## initializes git
 
 git_init() {
-echo -e ""$NLINE" Initializing git..."$COLEND""
+echo -e ""$NLINE" Initializing..."$COLEND""
 git init
 }
 
 ## see repo status
 
 git_status() {
-echo -e ""$NLINE""$BOLD"Repository status:"$COLEND""$NLINE""
+echo -e ""$NLINE""$BOLD"Status:"$COLEND""$NLINE""
 git status
 }
 
@@ -211,13 +209,11 @@ git status
 
 ## prints the 'Done! message'
 
-print_done() {
-	echo -e ""$NLINE""$DONE"Done!"$COLEND""$NLINE""
+print_finished() {
+echo -e ""$NLINE""$DONE"Finished!"$COLEND""$NLINE""
 }
 
-# pre-runtime check
-
-## checks if git binary exists
+# pre-runtime checks
 
 check_gitbin
 
@@ -232,122 +228,116 @@ case $1 in
 		;;
 	"global-config"|"gc")
 		set_config
-		git config --global user.name "$user_name"
-		git config --global user.email "$user_email"
-		print_done
+		global_config
+		print_finished
 		;;
 	"local-config"|"lc")
 		set_config
-		git config --local user.name "$user_name"
-		git config --local user.email "$user_email"
-		print_done
+		local_config
+		print_finished
 		;;
 	"init"|"in")
 		check_config
 		git_init
-		make_commit
-		read_names
-		echo -e ""$NLINE""$BOLD"Adding remote origin..."$COLEND""$NLINE""
-		git remote add origin https://github.com/"$user_name"/"$repo_name".git
-		print_done
+		print_finished
 		;;
 	"repo-setup"|"rs")
 		check_config
 		git_init
 		make_commit
 		read_names
-		echo -e ""$NLINE""$BOLD"Adding remote origin..."$COLEND""$NLINE""
+		echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""
 		git remote add origin https://github.com/"$user_name"/"$repo_name".git
-		echo -e ""$NLINE""$BOLD"Pushing to master branch..."$COLEND""$NLINE""
+		echo -e ""$NLINE""$BOLD"Pushing to branch 'master'..."$COLEND""$NLINE""
 		git push -u origin master
-		print_done
+		print_finished
 		;;
 	"commit"|"cm")
 		check_config
 		check_folder
 		make_commit
-		read -p $'\n\e[1mBranch to push: \e[0m' branch_push
-		echo -e ""$NLINE""$BOLD"Pushing to "$branch_push" branch..."$COLEND""$NLINE""
+		read -p $'\n\e[1mPush to branch: \e[0m' branch_push
+		echo -e ""$NLINE""$BOLD"Pushing to branch '"$branch_push"'..."$COLEND""$NLINE""
 		git push -u origin "$branch_push"
-		print_done
+		print_finished
 		;;
 	"tag"|"tg")
 		check_config
 		check_folder
 		make_tag
-		read -p $'\n\e[1mBranch to push: \e[0m' branch_push
+		read -p $'\n\e[1mPush to branch: \e[0m' branch_push
 		echo -e ""$NLINE""$BOLD"Pushing to "$branch_push" branch..."$COLEND""$NLINE""
 		git push -u origin "$branch_push"
-		print_done
+		print_finished
 		;;
 	"clone"|"cl")
-		read -p $'\n\e[1mRepository to clone: \e[0m' repo_clone
+		read -p $'\n\e[1mRepository name: \e[0m' repo_clone
 		read -p $'\n\e[1mRepository owner: \e[0m' repo_owner
 		git clone https://github.com/"$repo_owner"/"$repo_clone".git
-		print_done
+		print_finished
 		;;
 	"fetch"|"fc")
 		git fetch origin
-		print_done
+		print_finished
 		;;
 	"garbage-collector"|"gb")
 		git gc
-		print_done
+		print_finished
 		;;
 	"check-filesystem"|"cf")
 		git fsck
-		print_done
+		print_finished
 		;;
 	"reset"|"rt")
 		git reset --hard HEAD
-		print_done
+		print_finished
 		;;
 	"status"|"st")
 		git_status
-		print_done
+		print_finished
 		;;
 	"log"|"lg")
 		git log
-		print_done
+		print_finished
 		;;
 	"ls-tree"|"lt")
-		read -p $'\n\e[1mBranch to show: \e[0m' branch_name
-		echo -e ""$NLINE""$BOLD"Showing branch "$branch_name"..."$COLEND""$NLINE""
+		read -p $'\n\e[1mShow branch: \e[0m' branch_name
+		echo -e ""$NLINE""$BOLD"Contents of "$branch_name":"$COLEND""$NLINE""
 		git ls-tree "$branch_name"
-		print_done
+		print_finished
 		;;
 	"diff"|"df")
 		git diff
-		print_done
+		print_finished
 		;;
 	"grep"|"gp")
-		read -p $'\n\e[1mString to search: \e[0m' search_string
+		read -p $'\n\e[1mSearch: \e[0m' search_string
 		git grep "$search_string"
-		print_done
+		print_finished
 		;;
 	"branch-create"|"bc")
-		read -p $'\n\e[1mName your new branch: \e[0m' branch_name
+		read -p $'\n\e[1mNew branch: \e[0m' branch_name
 		echo -e ""$NLINE""$BOLD"Creating branch "$branch_name"..."$COLEND""$NLINE""
 		git branch "$branch_name"
-		print_done
+		print_finished
 		;;
 	"branch-remove"|"br")
-		read -p $'\n\e[1mBranch to remove: \e[0m' branch_name
+		read -p $'\n\e[1mRemove branch: \e[0m' branch_name
 		echo -e ""$NLINE""$BOLD"Removing branch "$branch_name"..."$COLEND""$NLINE""
 		git branch -D "$branch_name"
-		print_done
+		print_finished
 		;;
 	"branch-switch"|"bs")
-		read -p $'\n\e[1mBranch to switch: \e[0m' branch_name
+		read -p $'\n\e[1mSwitch to branch: \e[0m' branch_name
 		echo -e ""$NLINE""$BOLD"Switching to branch "$branch_name"..."$COLEND""$NLINE""
 		git checkout "$branch_name"
-		print_done
+		print_finished
 		;;
 	"merge"|"mg")
 		read -p $'\n\e[1mBranch to merge: \e[0m' branch_name
 		echo -e ""$NLINE""$BOLD"Merging..."$COLEND""$NLINE""
 		git merge "$branch_name"
-		print_done
+		print_finished
 		;;
 	"request-fetch"|"rf")
 		read -p $'\n\e[1mRequest ID: \e[0m' request_id
@@ -357,7 +347,7 @@ case $1 in
 		echo -e ""$NLINE""$BOLD"Switching to branch "$request_branch"..."$COLEND""$NLINE""
 		git checkout "$request_branch"
 		echo -e ""$NLINE""$BOLD"When you think you're ready, you can push the new branch using 'gitup commit' and setting the branch name to "$request_branch""$COLEND""$NLINE""
-		print_done
+		print_finished
 		;;
 esac
 
