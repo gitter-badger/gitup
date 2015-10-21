@@ -12,9 +12,14 @@ FIXER_RELEASE="9"
 CODENAME="Adagio"
 
 COPYRIGHT="Copyright 2015, Federico Damián. All rights reserved."
-LICENSE="BSD"
+LICENSE="BSD 3-Clause"
 
-WEBSITE="https://github.com/feskyde/gitup"
+WEBSITE="https://github.comfeskyde/gitup"
+
+## replace this string if you want to use GitUp with another 'git'-based solution
+
+GIT_WEB="https://github.com"
+
 
 ## help information
 
@@ -125,7 +130,7 @@ check_folder() {
 		echo -e ""$NLINE""$BOLD"There is not a .git folder present!"$COLEND""$NLINE""
 		echo -e ""$NLINE""$BOLD"Running repo-setup..."$COLEND""$NLINE""; git_init
 		read_names
-		echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin https://github.com/"$user_name"/"$repo_name".git
+		echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin "$GITWEB""$user_name"/"$repo_name".git
 		print_finished
 	fi
 }
@@ -180,7 +185,7 @@ repo_setup() {
 	git_init
 	read_names
 	commit_add
-	echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin https://github.com/"$user_name"/"$repo_name".git
+	echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin "$GITWEB""$user_name"/"$repo_name".git
 	echo -e ""$NLINE""$BOLD"Pushing to branch 'master'..."$COLEND""$NLINE""; git push -u origin master
 }
 
@@ -211,7 +216,7 @@ make_tag() {
 clone_repository() {
 	read -p $'\n\e[1mRepository name: \e[0m' repo_clone
 	read -p $'\n\e[1mRepository owner: \e[0m' repo_owner
-	git clone https://github.com/"$repo_owner"/"$repo_clone".git
+	git clone "$GITWEB""$repo_owner"/"$repo_clone".git
 }
 
 ## see repo status

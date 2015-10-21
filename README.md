@@ -49,29 +49,9 @@ Just type `gitup help` and see the magic...
 
 ## TO-DO:
 
-- [x] Add more commands.
-- [x] Some "eyecandy".
-- [ ] WIP: `gitup-cli`.
-- [ ] Make this script available for other `git` solutions (GitLab and such).
-- [ ] Make packages for other distros.
-
-## Releases
-
-### WIP
-
-- 0.4-1 "Flute"
-
-### Lastest
-
-- [0.3-1 "Euphonium"](https://github.com/feskyde/gitup/releases/tag/v0.3-1 "Big changes are here!")
-
-### Old
-
-See GitUp [0.2 "Drums"](https://github.com/feskyde/gitup/releases/tag/v0.2 "Sorry for this"), [0.1 "Castanets"](https://github.com/feskyde/gitup/releases/tag/v0.1 "First release!") and the [0.1.1](https://github.com/feskyde/gitup/releases/tag/v0.1.1) bugfix.
-
-## Collaborations:
-
-- @drpkg (use of `case`)
+- [x] Make this script available for other `git` solutions (GitLab and such).
+- [ ] Add more commands.
+- [ ] Make packages for some Linux and BSD distros.
 
 ## License:
 
