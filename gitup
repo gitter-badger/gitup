@@ -7,9 +7,9 @@ DESCRIPTION="The bash script that makes 'git' easier."
 COMMAND="gitup"
 
 MAYOR_RELEASE="0"
-MINOR_RELEASE="4"
-FIXER_RELEASE="1"
-CODENAME="Flute"
+MINOR_RELEASE="9"
+FIXER_RELEASE="9"
+CODENAME="Adagio"
 
 COPYRIGHT="Copyright 2015, Federico Damián. All rights reserved."
 LICENSE="BSD"
@@ -22,11 +22,11 @@ ARGUMENTS="[COMMAND]"
 
 print_about() {
 echo -e "
-"$BOLD""$NAME" version "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$FIXER_RELEASE" \"$CODENAME\".
+"$BOLD""$NAME" version "$MAYOR_RELEASE"."$MINOR_RELEASE"."$FIXER_RELEASE" \"$CODENAME\".
 "$DESCRIPTION"
 Website: "$WEBSITE".
 "$COPYRIGHT"
-"$NAME" is under the "$LICENSE" license."$COLEND"
+"$NAME" is released under the "$LICENSE" license."$COLEND"
 "
 }
 
@@ -99,38 +99,35 @@ fi
 SELECT_CONFIG="\"Global\" \"Local\""
 
 check_config() {
-if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ]
-then
-	echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
-	echo -e ""$NLINE""$BOLD"There is not any config file!"$COLEND""$NLINE""
-	echo -e ""$NLINE""$BOLD"What configuration do you want to set?"$COLEND""$NLINE""
-	eval set $SELECT_CONFIG
-	select opt in "$@";do
-		if [ "$opt" = "Global" ];then
-			set_config; global_config; print_finished
-		elif [ "$opt" = "Local" ];then
-			set_config; local_config; print_finished
-		else
-			echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
-			echo -e ""$NLINE""$BOLD"Invalid option!"$COLEND""$NLINE""
-		fi
-	done
-fi
+	if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ]; then
+		echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
+		echo -e ""$NLINE""$BOLD"There is not any config file!"$COLEND""$NLINE""
+		echo -e ""$NLINE""$BOLD"What configuration do you want to set?"$COLEND""$NLINE""
+		eval set $SELECT_CONFIG
+		select opt in "$@";do
+			if [ "$opt" = "Global" ];then
+				set_config; global_config; print_finished
+			elif [ "$opt" = "Local" ];then
+				set_config; local_config; print_finished
+			else
+				echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
+				echo -e ""$NLINE""$BOLD"Invalid option!"$COLEND""$NLINE""
+			fi
+		done
+	fi
 }
 
 ## checks if any .git folder is present
 
 check_folder() {
-	if [ ! -d ./.git ]
-	then
+	if [ ! -d ./.git ]; then
 		echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
 		echo -e ""$NLINE""$BOLD"There is not a .git folder present!"$COLEND""$NLINE""
-		echo -e ""$NLINE""$BOLD"Running repo-setup..."$COLEND""$NLINE""
-		git_init; read_names
-		echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""
-		git remote add origin https://github.com/"$user_name"/"$repo_name".git
+		echo -e ""$NLINE""$BOLD"Running repo-setup..."$COLEND""$NLINE""; git_init
+		read_names
+		echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin https://github.com/"$user_name"/"$repo_name".git
 		print_finished
-fi
+	fi
 }
 
 # runtime functions
@@ -138,142 +135,142 @@ fi
 ## reads configurations strings
 
 set_config() {
-read -p $'\n\e[1mReal name: \e[0m' user_name
-read -p $'\n\e[1mEmail: \e[0m' user_email
-echo -e ""$NLINE""$BOLD"Setting up..."$COLEND""
+	read -p $'\n\e[1mReal name: \e[0m' user_name
+	read -p $'\n\e[1mEmail: \e[0m' user_email
+	echo -e ""$NLINE""$BOLD"Setting up..."$COLEND""
 }
 
 ## sets configurations
 
 global_config() {
-set_config
-git config --global user.name "$user_name"; git config --global user.email "$user_email"
+	set_config
+	git config --global user.name "$user_name"; git config --global user.email "$user_email"
 }
 
 local_config() {
-set_config
-git config --local user.name "$user_name"; git config --local user.email "$user_email"
+	set_config
+	git config --local user.name "$user_name"; git config --local user.email "$user_email"
 }
 
 ## initializes git
 
 git_init() {
-check_config
-echo -e ""$NLINE" Initializing..."$COLEND""; git init
+	check_config
+	echo -e ""$NLINE" Initializing..."$COLEND""; git init
 }
 
 ## common function for commit and repo-setup
 
 commit_add() {
-read -p $'\n\e[1mCommit message: \e[0m' commit_message
-echo -e ""$NLINE""$BOLD"Adding files to commit..."$COLEND""; git add .; git commit -m "$commit_message"
+	read -p $'\n\e[1mCommit message: \e[0m' commit_message
+	echo -e ""$NLINE""$BOLD"Adding files to commit..."$COLEND""; git add .; git commit -m "$commit_message"
 }
 
 ## reads user_name and repo_name
 
 read_names() {
-read -p $'\n\e[1mUser name: \e[0m' user_name
-read -p $'\n\e[1mRepository name: \e[0m' repo_name
+	read -p $'\n\e[1mUser name: \e[0m' user_name
+	read -p $'\n\e[1mRepository name: \e[0m' repo_name
 }
 
 ## repo-setup
 
 repo_setup() {
-check_config
-git_init
-read_names
-commit_add
-echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin https://github.com/"$user_name"/"$repo_name".git
-echo -e ""$NLINE""$BOLD"Pushing to branch 'master'..."$COLEND""$NLINE""; git push -u origin master
+	check_config
+	git_init
+	read_names
+	commit_add
+	echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin https://github.com/"$user_name"/"$repo_name".git
+	echo -e ""$NLINE""$BOLD"Pushing to branch 'master'..."$COLEND""$NLINE""; git push -u origin master
 }
 
 ## function for commits
 
 make_commit() {
-check_config
-check_folder
-commit_add
-read -p $'\n\e[1mPush to branch: \e[0m' branch_push
-echo -e ""$NLINE""$BOLD"Pushing to branch '"$branch_push"'..."$COLEND""$NLINE""; git push -u origin "$branch_push"
+	check_config
+	check_folder
+	commit_add
+	read -p $'\n\e[1mPush to branch: \e[0m' branch_push
+	echo -e ""$NLINE""$BOLD"Pushing to branch '"$branch_push"'..."$COLEND""$NLINE""; git push -u origin "$branch_push"
 }
 
 ## function for tags
 
 make_tag() {
-check_config
-check_folder
-read -p $'\n\e[1mTag version: \e[0m' tag_version
-read -p $'\n\e[1mTag message: \e[0m' tag_message
-echo -e ""$NLINE""$BOLD"Adding files to tag '"$tag_version"'..."$COLEND""; git add .; git tag -a "$tag_version" -m "$tag_message"
-read -p $'\n\e[1mPush to branch: \e[0m' branch_push
-echo -e ""$NLINE""$BOLD"Pushing to "$branch_push" branch..."$COLEND""$NLINE""; git push -u origin "$branch_push"
+	check_config
+	check_folder
+	read -p $'\n\e[1mTag version: \e[0m' tag_version
+	read -p $'\n\e[1mTag message: \e[0m' tag_message
+	echo -e ""$NLINE""$BOLD"Adding files to tag '"$tag_version"'..."$COLEND""; git add .; git tag -a "$tag_version" -m "$tag_message"
+	read -p $'\n\e[1mPush to branch: \e[0m' branch_push
+	echo -e ""$NLINE""$BOLD"Pushing to "$branch_push" branch..."$COLEND""$NLINE""; git push -u origin "$branch_push"
 }
 
 ## clone
 
 clone_repository() {
-read -p $'\n\e[1mRepository name: \e[0m' repo_clone
-read -p $'\n\e[1mRepository owner: \e[0m' repo_owner
-git clone https://github.com/"$repo_owner"/"$repo_clone".git
+	read -p $'\n\e[1mRepository name: \e[0m' repo_clone
+	read -p $'\n\e[1mRepository owner: \e[0m' repo_owner
+	git clone https://github.com/"$repo_owner"/"$repo_clone".git
 }
 
 ## see repo status
 
 git_status() {
-echo -e ""$NLINE""$BOLD"Status:"$COLEND""$NLINE""; git status
+	echo -e ""$NLINE""$BOLD"Status:"$COLEND""$NLINE""; git status
 }
 
 ## branch management
 
 branch_create() {
-read -p $'\n\e[1mNew branch: \e[0m' branch_name
-echo -e ""$NLINE""$BOLD"Creating branch "$branch_name"..."$COLEND""$NLINE""; git branch "$branch_name"
+	read -p $'\n\e[1mNew branch: \e[0m' branch_name
+	echo -e ""$NLINE""$BOLD"Creating branch "$branch_name"..."$COLEND""$NLINE""; git branch "$branch_name"
 }
 
 branch_remove() {
-read -p $'\n\e[1mRemove branch: \e[0m' branch_name
-echo -e ""$NLINE""$BOLD"Removing branch "$branch_name"..."$COLEND""$NLINE""; git branch -D "$branch_name"
+	read -p $'\n\e[1mRemove branch: \e[0m' branch_name
+	echo -e ""$NLINE""$BOLD"Removing branch "$branch_name"..."$COLEND""$NLINE""; git branch -D "$branch_name"
 }
 
 branch_switch() {
-read -p $'\n\e[1mSwitch to branch: \e[0m' branch_name
-echo -e ""$NLINE""$BOLD"Switching to branch "$branch_name"..."$COLEND""$NLINE""; git checkout "$branch_name"
+	read -p $'\n\e[1mSwitch to branch: \e[0m' branch_name
+	echo -e ""$NLINE""$BOLD"Switching to branch "$branch_name"..."$COLEND""$NLINE""; git checkout "$branch_name"
 }
 
 branch_merge() {
-read -p $'\n\e[1mBranch to merge: \e[0m' branch_name
-echo -e ""$NLINE""$BOLD"Merging..."$COLEND""$NLINE""; git merge "$branch_name"
+	read -p $'\n\e[1mBranch to merge: \e[0m' branch_name
+	echo -e ""$NLINE""$BOLD"Merging..."$COLEND""$NLINE""; git merge "$branch_name"
 }
 
 ## grep
 
 git_grep() {
-read -p $'\n\e[1mSearch: \e[0m' search_string
-git grep "$search_string"
+	read -p $'\n\e[1mSearch: \e[0m' search_string
+	git grep "$search_string"
 }
 
 ## ls-tree
 
 ls_tree() {
-read -p $'\n\e[1mShow branch: \e[0m' branch_name
-echo -e ""$NLINE""$BOLD"Contents of "$branch_name":"$COLEND""$NLINE""; git ls-tree "$branch_name"
+	read -p $'\n\e[1mShow branch: \e[0m' branch_name
+	echo -e ""$NLINE""$BOLD"Contents of "$branch_name":"$COLEND""$NLINE""; git ls-tree "$branch_name"
 }
 
 # fetch-request
 
 fetch_request() {
-read -p $'\n\e[1mRequest ID: \e[0m' request_id
-read -p $'\n\e[1mBranch: \e[0m' request_branch
-echo -e ""$NLINE""$BOLD"Fetching files from the "$request_branch" branch..."$COLEND""$NLINE""; git fetch origin pull/"$request_id"/head:"$request_branch"
-echo -e ""$NLINE""$BOLD"Switching to branch "$request_branch"..."$COLEND""$NLINE""; git checkout "$request_branch"
+	read -p $'\n\e[1mRequest ID: \e[0m' request_id
+	read -p $'\n\e[1mBranch: \e[0m' request_branch
+	echo -e ""$NLINE""$BOLD"Fetching files from the "$request_branch" branch..."$COLEND""$NLINE""; git fetch origin pull/"$request_id"/head:"$request_branch"
+	echo -e ""$NLINE""$BOLD"Switching to branch "$request_branch"..."$COLEND""$NLINE""; git checkout "$request_branch"
 }
 
 # post-runtime functions
 
-## prints the 'Done! message'
+## prints the 'Finished!' message
 
 print_finished() {
-echo -e ""$NLINE""$DONE"Finished!"$COLEND""$NLINE""
+	echo -e ""$NLINE""$DONE"Finished!"$COLEND""$NLINE""
 }
 
 # pre-runtime checks
