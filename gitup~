@@ -163,33 +163,22 @@ git config --local user.name "$user_name"; git config --local user.email "$user_
 ## initializes git
 
 git_init() {
-check_config
-echo -e ""$NLINE" Initializing..."$COLEND""; git init
+echo -e ""$NLINE" Initializing..."$COLEND""
+git init
 }
-
-## common function for commit and repo-setup
-
-commit_add() {
-read -p $'\n\e[1mCommit message: \e[0m' commit_message
-echo -e ""$NLINE""$BOLD"Adding files to commit..."$COLEND""; git add .; git commit -m "$commit_message"
-}
-
-## reads user_name and repo_name
-
-read_names() {
-read -p $'\n\e[1mUser name: \e[0m' user_name
-read -p $'\n\e[1mRepository name: \e[0m' repo_name
-}
-
-## repo-setup
 
 repo_setup() {
 check_config
 git_init
 read_names
-commit_add
-echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin https://github.com/"$user_name"/"$repo_name".git
-echo -e ""$NLINE""$BOLD"Pushing to branch 'master'..."$COLEND""$NLINE""; git push -u origin master
+read -p $'\n\e[1mCommit message: \e[0m' commit_message
+echo -e ""$NLINE""$BOLD"Adding files to commit..."$COLEND""
+git add .
+git commit -m "$commit_message"
+echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""
+git remote add origin https://github.com/"$user_name"/"$repo_name".git
+echo -e ""$NLINE""$BOLD"Pushing to branch 'master'..."$COLEND""$NLINE""
+git push -u origin master
 }
 
 ## function for commits
@@ -197,9 +186,13 @@ echo -e ""$NLINE""$BOLD"Pushing to branch 'master'..."$COLEND""$NLINE""; git pus
 make_commit() {
 check_config
 check_folder
-commit_add
+read -p $'\n\e[1mCommit message: \e[0m' commit_message
+echo -e ""$NLINE""$BOLD"Adding files to commit..."$COLEND""
+git add .
+git commit -m "$commit_message"
 read -p $'\n\e[1mPush to branch: \e[0m' branch_push
-echo -e ""$NLINE""$BOLD"Pushing to branch '"$branch_push"'..."$COLEND""$NLINE""; git push -u origin "$branch_push"
+echo -e ""$NLINE""$BOLD"Pushing to branch '"$branch_push"'..."$COLEND""$NLINE""
+git push -u origin "$branch_push"
 }
 
 ## function for tags
@@ -209,9 +202,12 @@ check_config
 check_folder
 read -p $'\n\e[1mTag version: \e[0m' tag_version
 read -p $'\n\e[1mTag message: \e[0m' tag_message
-echo -e ""$NLINE""$BOLD"Adding files to tag '"$tag_version"'..."$COLEND""; git add .; git tag -a "$tag_version" -m "$tag_message"
+echo -e ""$NLINE""$BOLD"Adding files to tag '"$tag_version"'..."$COLEND""
+git add .
+git tag -a "$tag_version" -m "$tag_message"
 read -p $'\n\e[1mPush to branch: \e[0m' branch_push
-echo -e ""$NLINE""$BOLD"Pushing to "$branch_push" branch..."$COLEND""$NLINE""; git push -u origin "$branch_push"
+echo -e ""$NLINE""$BOLD"Pushing to "$branch_push" branch..."$COLEND""$NLINE""
+git push -u origin "$branch_push"
 }
 
 ## clone
@@ -225,29 +221,34 @@ git clone https://github.com/"$repo_owner"/"$repo_clone".git
 ## see repo status
 
 git_status() {
-echo -e ""$NLINE""$BOLD"Status:"$COLEND""$NLINE""; git status
+echo -e ""$NLINE""$BOLD"Status:"$COLEND""$NLINE""
+git status
 }
 
 ## branch management
 
 branch_create() {
 read -p $'\n\e[1mNew branch: \e[0m' branch_name
-echo -e ""$NLINE""$BOLD"Creating branch "$branch_name"..."$COLEND""$NLINE""; git branch "$branch_name"
+echo -e ""$NLINE""$BOLD"Creating branch "$branch_name"..."$COLEND""$NLINE""
+git branch "$branch_name"
 }
 
 branch_remove() {
 read -p $'\n\e[1mRemove branch: \e[0m' branch_name
-echo -e ""$NLINE""$BOLD"Removing branch "$branch_name"..."$COLEND""$NLINE""; git branch -D "$branch_name"
+echo -e ""$NLINE""$BOLD"Removing branch "$branch_name"..."$COLEND""$NLINE""
+git branch -D "$branch_name"
 }
 
 branch_switch() {
 read -p $'\n\e[1mSwitch to branch: \e[0m' branch_name
-echo -e ""$NLINE""$BOLD"Switching to branch "$branch_name"..."$COLEND""$NLINE""; git checkout "$branch_name"
+echo -e ""$NLINE""$BOLD"Switching to branch "$branch_name"..."$COLEND""$NLINE""
+git checkout "$branch_name"
 }
 
 branch_merge() {
 read -p $'\n\e[1mBranch to merge: \e[0m' branch_name
-echo -e ""$NLINE""$BOLD"Merging..."$COLEND""$NLINE""; git merge "$branch_name"
+echo -e ""$NLINE""$BOLD"Merging..."$COLEND""$NLINE""
+git merge "$branch_name"
 }
 
 ## grep
@@ -261,16 +262,15 @@ git grep "$search_string"
 
 ls_tree() {
 read -p $'\n\e[1mShow branch: \e[0m' branch_name
-echo -e ""$NLINE""$BOLD"Contents of "$branch_name":"$COLEND""$NLINE""; git ls-tree "$branch_name"
+echo -e ""$NLINE""$BOLD"Contents of "$branch_name":"$COLEND""$NLINE""
+git ls-tree "$branch_name"
 }
 
-# fetch-request
+## reads user_name and repo_name
 
-fetch_request() {
-read -p $'\n\e[1mRequest ID: \e[0m' request_id
-read -p $'\n\e[1mBranch: \e[0m' request_branch
-echo -e ""$NLINE""$BOLD"Fetching files from the "$request_branch" branch..."$COLEND""$NLINE""; git fetch origin pull/"$request_id"/head:"$request_branch"
-echo -e ""$NLINE""$BOLD"Switching to branch "$request_branch"..."$COLEND""$NLINE""; git checkout "$request_branch"
+read_names() {
+read -p $'\n\e[1mUser name: \e[0m' user_name
+read -p $'\n\e[1mRepository name: \e[0m' repo_name
 }
 
 # post-runtime functions
@@ -292,7 +292,7 @@ case $1 in
 	"help") print_help;;
 	"global-config"|"gc") global_config; print_finished;;
 	"local-config"|"lc") local_config; print_finished;;
-	"init"|"in") git_init; print_finished;;
+	"init"|"in")  git_init; print_finished;;
 	"repo-setup"|"rs") repo_setup; print_finished;;
 	"commit"|"cm") make_commit; print_finished;;
 	"tag"|"tg") make_tag; print_finished;;
@@ -310,8 +310,16 @@ case $1 in
 	"branch-remove"|"br") branch_remove; print_finished;;
 	"branch-switch"|"bs") branch_switch; print_finished;;
 	"merge"|"mg") branch_merge; print_finished;;
-	"fetch-request"|"fr") fetch_request; print_finished;;
+	"request-fetch"|"rf")
+		read -p $'\n\e[1mRequest ID: \e[0m' request_id
+		read -p $'\n\e[1mBranch: \e[0m' request_branch
+		echo -e ""$NLINE""$BOLD"Fetching files from the "$request_branch" branch..."$COLEND""$NLINE""
+		git fetch origin pull/"$request_id"/head:"$request_branch"
+		echo -e ""$NLINE""$BOLD"Switching to branch "$request_branch"..."$COLEND""$NLINE""
+		git checkout "$request_branch"
+		echo -e ""$NLINE""$BOLD"When you think you're ready, you can push the new branch using 'gitup commit' and setting the branch name to "$request_branch""$COLEND""$NLINE""
+		print_finished
+		;;
 esac
 
 # script end
-
