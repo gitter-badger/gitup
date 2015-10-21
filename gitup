@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# GitUp
-# Copyright (c) 2015, Federico Damián Schonborn <github.com/feskyde>
-# All rights reserved.
-
 ## set script info
 
 NAME="GitUp"
@@ -15,6 +11,7 @@ MINOR_RELEASE="4"
 FIXER_RELEASE="1"
 CODENAME="Flute"
 
+COPYRIGHT="Copyright 2015, Federico Damián. All rights reserved."
 LICENSE="BSD"
 
 WEBSITE="https://github.com/feskyde/gitup"
@@ -23,45 +20,60 @@ WEBSITE="https://github.com/feskyde/gitup"
 
 ARGUMENTS="[COMMAND]"
 
-OPTIONS_LIST="
-\nList of options:
-\n
-\nConfiguration:
-\n
-\nlc, local-config: local user config
-\ngc, global-config: global user config
-\n
-\nRepository:
-\n
-\nin, init: initializes git
-\nrs, repo-setup: set-up a repository
-\ncm, commit: push a new commit
-\ncl, clone: clone a repository
-\nfc, fetch: fetches not present objects from remote
-\ngb, garbage-collector: optimizes your repository
-\ncf, check-filesystem: do an integrity check of repository
-\nrt, reset: reset directory to lastest commit
-\n
-\nStatus:
-\n
-\nst, status: see repository status
-\nlg, log: see all commits
-\n
-\nFiles:
-\nlt, ls-tree: see a tree of files form a branch
-\ndf, diff: see diff between files
-\ngp, grep: search a string on all files
-\n
-\nBranches:
-\n
-\nbc, branch-create: create a branch
-\nbr, branch-remove: remove a branch
-\nbs, branch-switch: switch to a branch
-\nmg, merge: merge two branches
-\n
-\nPull requests:
-\n
-\nfr, fetch-request: Fetch pull request data"
+print_about() {
+echo -e "
+"$BOLD""$NAME" version "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$FIXER_RELEASE" \"$CODENAME\".
+"$DESCRIPTION"
+Website: "$WEBSITE".
+"$COPYRIGHT"
+"$NAME" is under the "$LICENSE" license."$COLEND"
+"
+}
+
+print_help() {
+echo -e "
+"$BOLD"Usage: gitup [COMMAND]"$COLEND"
+
+"$BOLD"List of options:"$COLEND"
+
+Configuration:
+
+lc, local-config:		local user config
+gc, global-config:		global user config
+
+Repository:
+
+in, init:			initializes git
+rs, repo-setup:			set-up a repository
+cm, commit:			push a new commit
+cl, clone:			clone a repository
+fc, fetch:			fetches not present objects from remote
+gb, garbage-collector:		optimizes your repository
+cf, check-filesystem:		do an integrity check of repository
+rt, reset:			reset directory to lastest commit
+
+Status:
+
+st, status:			see repository status
+lg, log:			see all commits
+
+Files:
+lt, ls-tree:			see a tree of files form a branch
+df, diff:			see diff between files
+gp, grep:			search a string on all files
+
+Branches:
+
+bc, branch-create:		create a branch
+br, branch-remove:		remove a branch
+bs, branch-switch:		switch to a branch
+mg, merge:			merge two branches
+
+Pull requests:
+
+fr, fetch-request:		fetch pull request data
+"
+}
 
 # set message prompt settings
 
@@ -70,23 +82,6 @@ DONE="\e[32;1m"
 BOLD="\e[1m"
 COLEND="\e[0m"
 NLINE="\n"
-
-# help and about sections
-
-## prints the help section
-
-print_help() {
-echo -e ""$NLINE""$BOLD"Usage: "$COMMAND" "$ARGUMENTS""$COLEND""$NLINE""$OPTIONS_LIST""$NLINE""
-}
-
-## prints the about section
-
-print_about() {
-echo -e ""$NLINE""$BOLD""$NAME" version "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$FIXER_RELEASE" \"$CODENAME\".
-"$DESCRIPTION"
-Website: "$WEBSITE".
-"$NAME" is under the "$LICENSE" license."$COLEND""$NLINE""
-}
 
 # pre-runtime functions
 
