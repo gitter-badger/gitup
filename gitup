@@ -6,19 +6,21 @@ NAME="GitUp"
 DESCRIPTION="The bash script that makes 'git' easier."
 COMMAND="gitup"
 
-MAYOR_RELEASE="0"
-MINOR_RELEASE="9"
-FIXER_RELEASE="9"
+MAYOR_RELEASE="1"
+MINOR_RELEASE="0"
+FIXER_RELEASE="0"
+DEV_RELEASE="RC"
 CODENAME="Adagio"
 
 COPYRIGHT="Copyright 2015, Federico Damián. All rights reserved."
 LICENSE="BSD 3-Clause"
 
-WEBSITE="https://github.comfeskyde/gitup"
+WEBSITE="https://github.com/feskyde/gitup"
 
-## replace this string if you want to use GitUp with another 'git'-based solution
+## replace this string if you want to use GitUp with another 'git'-based solution or web protocol
 
-GIT_WEB="https://github.com"
+GIT_PROT="https"
+GIT_WEB=""$GIT_PROT"://github.com"
 
 
 ## help information
@@ -27,7 +29,7 @@ ARGUMENTS="[COMMAND]"
 
 print_about() {
 echo -e "
-"$BOLD""$NAME" version "$MAYOR_RELEASE"."$MINOR_RELEASE"."$FIXER_RELEASE" \"$CODENAME\".
+"$BOLD""$NAME" version "$MAYOR_RELEASE"."$MINOR_RELEASE"."$FIXER_RELEASE"-"$DEV_RELEASE" \"$CODENAME\".
 "$DESCRIPTION"
 Website: "$WEBSITE".
 "$COPYRIGHT"
@@ -45,6 +47,7 @@ Configuration:
 
 lc, local-config:		local user config
 gc, global-config:		global user config
+print-git:			prints the git webpage that you're using
 
 Repository:
 
@@ -130,12 +133,16 @@ check_folder() {
 		echo -e ""$NLINE""$BOLD"There is not a .git folder present!"$COLEND""$NLINE""
 		echo -e ""$NLINE""$BOLD"Running repo-setup..."$COLEND""$NLINE""; git_init
 		read_names
-		echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin "$GITWEB""$user_name"/"$repo_name".git
+		echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin "$GIT_WEB"/"$user_name"/"$repo_name".git
 		print_finished
 	fi
 }
 
 # runtime functions
+
+print_git() {
+echo -e "$GIT_WEB"
+}
 
 ## reads configurations strings
 
@@ -185,7 +192,7 @@ repo_setup() {
 	git_init
 	read_names
 	commit_add
-	echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin "$GITWEB""$user_name"/"$repo_name".git
+	echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin "$GIT_WEB"/"$user_name"/"$repo_name".git
 	echo -e ""$NLINE""$BOLD"Pushing to branch 'master'..."$COLEND""$NLINE""; git push -u origin master
 }
 
@@ -216,7 +223,7 @@ make_tag() {
 clone_repository() {
 	read -p $'\n\e[1mRepository name: \e[0m' repo_clone
 	read -p $'\n\e[1mRepository owner: \e[0m' repo_owner
-	git clone "$GITWEB""$repo_owner"/"$repo_clone".git
+	git clone "$GIT_WEB"/"$repo_owner"/"$repo_clone".git
 }
 
 ## see repo status
@@ -287,6 +294,7 @@ check_gitbin
 case $1 in
 	"about") print_about;;
 	"help") print_help;;
+	"print-git") print_git;;
 	"global-config"|"gc") global_config; print_finished;;
 	"local-config"|"lc") local_config; print_finished;;
 	"init"|"in") git_init; print_finished;;
