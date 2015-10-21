@@ -61,7 +61,7 @@ OPTIONS_LIST="
 \n
 \nPull requests:
 \n
-\nrf, request-fetch: Fetch pull request data"
+\nfr, fetch-request: Fetch pull request data"
 
 # set message prompt settings
 
