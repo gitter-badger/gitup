@@ -95,7 +95,9 @@ Website: "$WEBSITE".
 check_gitbin() {
 if [ ! -f /usr/bin/git ]
 then
-	echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""; echo -e ""$BOLD"'git' is not found!"$COLEND""$NLINE""; exit
+	echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
+	echo -e ""$BOLD"'git' is not found!"$COLEND""$NLINE""
+	exit
 fi
 }
 
@@ -111,10 +113,16 @@ then
 	echo -e ""$NLINE""$BOLD"What configuration do you want to set?"$COLEND""$NLINE""
 	eval set $SELECT_CONFIG
 	select opt in "$@";do
-		if [ "$opt" = "Global" ];then
-			set_config; global_config; print_finished
-		elif [ "$opt" = "Local" ];then
-			set_config; local_config; print_finished
+		if [ "$opt" = "Global" ]
+		then
+			set_config
+			global_config
+			print_finished
+		elif [ "$opt" = "Local" ]
+		then
+			set_config
+			local_config
+			print_finished
 		else
 			echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
 			echo -e ""$NLINE""$BOLD"Invalid option!"$COLEND""$NLINE""
@@ -131,7 +139,8 @@ check_folder() {
 		echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
 		echo -e ""$NLINE""$BOLD"There is not a .git folder present!"$COLEND""$NLINE""
 		echo -e ""$NLINE""$BOLD"Running repo-setup..."$COLEND""$NLINE""
-		git_init; read_names
+		git_init
+		read_names
 		echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""
 		git remote add origin https://github.com/"$user_name"/"$repo_name".git
 		print_finished
@@ -151,11 +160,13 @@ echo -e ""$NLINE""$BOLD"Setting up..."$COLEND""
 ## sets configurations
 
 global_config() {
-git config --global user.name "$user_name"; git config --global user.email "$user_email"
+git config --global user.name "$user_name"
+git config --global user.email "$user_email"
 }
 
 local_config() {
-git config --local user.name "$user_name"; git config --local user.email "$user_email"
+git config --local user.name "$user_name"
+git config --local user.email "$user_email"
 }
 
 ## function for commits
@@ -213,11 +224,27 @@ check_gitbin
 # start of case (commands)
 
 case $1 in
-	"about") print_about;;
-	"help") print_help;;
-	"global-config"|"gc") set_config; global_config; print_finished;;
-	"local-config"|"lc") set_config; local_config; print_finished;;
-	"init"|"in") check_config; git_init; print_finished;;
+	"about")
+		print_about
+		;;
+	"help")
+		print_help
+		;;
+	"global-config"|"gc")
+		set_config
+		global_config
+		print_finished
+		;;
+	"local-config"|"lc")
+		set_config
+		local_config
+		print_finished
+		;;
+	"init"|"in")
+		check_config
+		git_init
+		print_finished
+		;;
 	"repo-setup"|"rs")
 		check_config
 		git_init
@@ -253,12 +280,28 @@ case $1 in
 		git clone https://github.com/"$repo_owner"/"$repo_clone".git
 		print_finished
 		;;
-	"fetch"|"fc") git fetch origin; print_finished;;
-	"garbage-collector"|"gb") git gc;print_finished;;
-	"check-filesystem"|"cf") git fsck; print_finished;;
-	"reset"|"rt") git reset --hard HEAD; print_finished;;
-	"status"|"st") git_status; print_finished;;
-	"log"|"lg") git log; print_finished;;
+	"fetch"|"fc")
+		git fetch origin
+		print_finished
+		;;
+	"garbage-collector"|"gb")
+		git gc
+		print_finished
+		;;
+	"check-filesystem"|"cf")
+		git fsck
+		print_finished
+		;;
+	"reset"|"rt")
+		git reset --hard HEAD
+		print_finished
+		;;
+	"status"|"st")
+		git_status
+		print_finished
+		;;
+	"log"|"lg") git log; print_finished
+		;;
 	"ls-tree"|"lt")
 		read -p $'\n\e[1mShow branch: \e[0m' branch_name
 		echo -e ""$NLINE""$BOLD"Contents of "$branch_name":"$COLEND""$NLINE""

@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# GitUp
+# Copyright (c) 2015, Federico Damián Schonborn <github.com/feskyde>
+# All rights reserved.
+
+## set script info
+
+NAME="GitUp CLI"
+DESCRIPTION="The bash script that makes 'git' easier."
+COMMAND="gitup-cli"
+
+MAYOR_RELEASE="0"
+MINOR_RELEASE="4"
+FIXER_RELEASE="1"
+CODENAME="Flamenco"
+
+LICENSE="BSD"
+
+WEBSITE="https://github.com/feskyde/gitup"
+
+# start of functions
+
+trap "rm $OUTPUT; rm $INPUT; exit" SIGHUP SIGINT SIGTERM
+
+while true
+do
+
+## prints the about window
+
+about_window() {
+dialog --backtitle "$(echo ""$NAME" version "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$FIXER_RELEASE" \"$CODENAME\".")" --title "About" --msgbox "$(echo ""$NAME" version "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$FIXER_RELEASE" \"$CODENAME\".
+"$DESCRIPTION"
+Website: "$WEBSITE".
+"$NAME" is under the "$LICENSE" license.")" 0 0
+}
+
+options_window() {
+dialog --title "Welcome to GitUp CLI" --menu 0 0 3 Commit "Make a commit" About "About GitUp CLI" Exit "Leave this script" 2>"${OPTION}"
+case $menuitem in
+	About) $about_window;;
+	Exit) echo "Bye"; break;;
+esac
+}
+
+menuitem=$(<"${INPUT}")
+
+done
+ 
+# if temp files found, delete em
+[ -f $OUTPUT ] && rm $OUTPUT
+[ -f $INPUT ] && rm $INPUT
+
+# start of 'case' (options)
+
+case $1 in
+	"about") about_window;;
+	"") options_window;;
+esac
