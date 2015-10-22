@@ -60,3 +60,4 @@ If you want to use GitUp with another git-based solution than GitHub, replace th
 ## License
 
 GitUp is distributed under the BSD 3-Clause license, for further information see [LICENSE](https://github.com/feskyde/gitup/blob/master/LICENSE) file.
+

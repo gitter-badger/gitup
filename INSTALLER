@@ -12,7 +12,7 @@ NAME="usi"
 DESCRIPTION="A script for installing scripts, basically."
 COMMAND="INSTALLER"
 
-RELEASE="CRT"
+RELEASE="DRB"
 CODENAME="Allegro"
 
 COPYRIGHT="Copyright 2015, Federico Damián. All rights reserved."
@@ -118,3 +118,4 @@ case $1 in
 esac
 
 # end of script
+
