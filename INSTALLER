@@ -8,26 +8,21 @@
 
 ## set script info
 
-PRETTY_NAME="Universal Script Installer"
-BINARY="INSTALLER"
-MAYOR_RELEASE="0"
-MINOR_RELEASE="1"
-DASH_RELEASE="1"
-CODENAME="Pop"
+NAME="usi"
+DESCRIPTION="A script for installing scripts, basically."
+COMMAND="INSTALLER"
+
+RELEASE="CRT"
+CODENAME="Allegro"
+
+COPYRIGHT="Copyright 2015, Federico Damián. All rights reserved."
+LICENSE="BSD 3-Clause"
 
 # USI information
 
 INSTALL_PNAME="GitUp"
 INSTALL_BINARY="gitup"
 INSTALL_LOCATION=/usr/bin/
-
-# license(s)
-
-LICENSE="BSD"
-
-## about command info
-
-DESCRIPTION="A script for installing scripts, basically."
 
 ## help command info
 
@@ -46,15 +41,18 @@ OPTIONS_LIST="
 ## prints the help section
 
 print_help() {
-echo -e ""$NLINE""$BOLD"Usage: "$BINARY" "$ARGUMENTS""$COLEND""$NLINE""$OPTIONS_HEADER""$NLINE""$OPTIONS_LIST""$NLINE""
+echo -e ""$NLINE""$BOLD"Usage: "$COMMAND" "$ARGUMENTS""$COLEND""$NLINE""$OPTIONS_HEADER""$NLINE""$OPTIONS_LIST""$NLINE""
 }
 
 ## prints the about section
 
 print_about() {
-echo -e ""$NLINE""$BOLD""$PRETTY_NAME" ver. "$MAYOR_RELEASE"."$MINOR_RELEASE"-"$DASH_RELEASE" \"$CODENAME\".
+echo -e "
+"$BOLD""$NAME" version "$RELEASE" \"$CODENAME\".
 "$DESCRIPTION"
-"$PRETTY_NAME" is released under the "$LICENSE" license."$COLEND""$NLINE""
+"$COPYRIGHT"
+"$NAME" is released under the "$LICENSE" license."$COLEND"
+"
 }
 
 # set message prompt settings
@@ -76,52 +74,46 @@ print_done() {
 # pre-runtime checks
 
 check_root() {
-if [ ! $(whoami) = root ]
-then
-	echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
-	echo -e ""$BOLD"You are not root. "$INSTALL_PNAME" will not be installed."$COLEND""$NLINE""
-	exit
-fi
+	if [ ! $(whoami) = root ]
+	then
+		echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
+		echo -e ""$BOLD"You are not root. "$INSTALL_PNAME" will not be installed."$COLEND""$NLINE""
+		exit
+	fi
 }
 
 # runtime checks
 
 check_installed() {
-if [ -f "$INSTALL_LOCATION""$INSTALL_BINARY" ]
-then
-	echo -e ""$NLINE""$DONE""$INSTALL_PNAME" is installed!"$COLEND""$NLINE""
-	exit
-else
-	echo -e ""$NLINE""$ERROR""$INSTALL_PNAME" is NOT installed!"$COLEND""$NLINE""
-	exit
-fi
+	if [ -f "$INSTALL_LOCATION""$INSTALL_BINARY" ]
+	then
+		echo -e ""$NLINE""$DONE""$INSTALL_PNAME" is installed!"$COLEND""$NLINE""
+		exit
+	else
+		echo -e ""$NLINE""$ERROR""$INSTALL_PNAME" is NOT installed!"$COLEND""$NLINE""
+		exit
+	fi
 }
 
 # start of case (options)
 
 case $1 in
-	"about")
-		print_about
-		;;
-	"help")
-		print_help
-		;;
+	"about") print_about;;
+	"help")	print_help;;
 	"")
 		check_root
-		echo -e ""$NLINE""$BOLD"Installing..."$COLEND""
-		cp "$INSTALL_BINARY" "$INSTALL_LOCATION""$INSTALL_BINARY"
+		echo -e ""$NLINE""$BOLD"Installing..."$COLEND""; cp "$INSTALL_BINARY" "$INSTALL_LOCATION""$INSTALL_BINARY"
 		print_done
 		;;
 	"uninstall")
 		check_root
-		echo -e ""$NLINE""$BOLD"Uninstalling..."$COLEND""
-		rm -rf "$INSTALL_LOCATION""$INSTALL_BINARY"
+		echo -e ""$NLINE""$BOLD"Uninstalling..."$COLEND""; rm -rf "$INSTALL_LOCATION""$INSTALL_BINARY"
 		print_done
 		;;
 	"check")
 		check_root
-		echo -e ""$NLINE""$BOLD"Checking for "$INSTALL_PNAME"..."$COLEND""
-		check_installed
+		echo -e ""$NLINE""$BOLD"Checking for "$INSTALL_PNAME"..."$COLEND""; check_installed
+		print_done
 		;;
 esac
 

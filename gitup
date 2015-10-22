@@ -9,7 +9,7 @@ COMMAND="gitup"
 MAYOR_RELEASE="1"
 MINOR_RELEASE="0"
 FIXER_RELEASE="0"
-DEV_RELEASE="RC"
+DEV_RELEASE="RELEASE"
 CODENAME="Adagio"
 
 COPYRIGHT="Copyright 2015, Federico Damián. All rights reserved."
@@ -102,29 +102,6 @@ then
 fi
 }
 
-# check if global and local configurations are setted
-
-SELECT_CONFIG="\"Global\" \"Local\""
-
-check_config() {
-	if [ ! -f ~/.gitconfig ] && [ ! -f ./.git/config ]; then
-		echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
-		echo -e ""$NLINE""$BOLD"There is not any config file!"$COLEND""$NLINE""
-		echo -e ""$NLINE""$BOLD"What configuration do you want to set?"$COLEND""$NLINE""
-		eval set $SELECT_CONFIG
-		select opt in "$@";do
-			if [ "$opt" = "Global" ];then
-				set_config; global_config; print_finished
-			elif [ "$opt" = "Local" ];then
-				set_config; local_config; print_finished
-			else
-				echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
-				echo -e ""$NLINE""$BOLD"Invalid option!"$COLEND""$NLINE""
-			fi
-		done
-	fi
-}
-
 ## checks if any .git folder is present
 
 check_folder() {
@@ -141,7 +118,9 @@ check_folder() {
 # runtime functions
 
 print_git() {
-echo -e "$GIT_WEB"
+	echo -e ""$NLINE""$BOLD"Active git upload setting:"$COLEND""$NLINE""
+	echo -e ""$GIT_WEB""
+	print_finished
 }
 
 ## reads configurations strings
@@ -167,13 +146,12 @@ local_config() {
 ## initializes git
 
 git_init() {
-	check_config
 	echo -e ""$NLINE" Initializing..."$COLEND""; git init
 }
 
 ## common function for commit and repo-setup
 
-commit_add() {
+add_commit() {
 	read -p $'\n\e[1mCommit message: \e[0m' commit_message
 	echo -e ""$NLINE""$BOLD"Adding files to commit..."$COLEND""; git add .; git commit -m "$commit_message"
 }
@@ -188,10 +166,9 @@ read_names() {
 ## repo-setup
 
 repo_setup() {
-	check_config
 	git_init
 	read_names
-	commit_add
+	add_commit
 	echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin "$GIT_WEB"/"$user_name"/"$repo_name".git
 	echo -e ""$NLINE""$BOLD"Pushing to branch 'master'..."$COLEND""$NLINE""; git push -u origin master
 }
@@ -199,9 +176,8 @@ repo_setup() {
 ## function for commits
 
 make_commit() {
-	check_config
 	check_folder
-	commit_add
+	add_commit
 	read -p $'\n\e[1mPush to branch: \e[0m' branch_push
 	echo -e ""$NLINE""$BOLD"Pushing to branch '"$branch_push"'..."$COLEND""$NLINE""; git push -u origin "$branch_push"
 }
@@ -209,7 +185,6 @@ make_commit() {
 ## function for tags
 
 make_tag() {
-	check_config
 	check_folder
 	read -p $'\n\e[1mTag version: \e[0m' tag_version
 	read -p $'\n\e[1mTag message: \e[0m' tag_message
@@ -293,7 +268,7 @@ check_gitbin
 
 case $1 in
 	"about") print_about;;
-	"help") print_help;;
+	"help"|"") print_help;;
 	"print-git") print_git;;
 	"global-config"|"gc") global_config; print_finished;;
 	"local-config"|"lc") local_config; print_finished;;

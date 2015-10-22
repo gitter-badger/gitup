@@ -21,7 +21,7 @@ Thus, is a problem with this, 'cause the prompt coloration is used a lot on `git
 
 \e[1mReal Name: [\0m
 
-instead of this:
+Instead of this:
 
 **Real name:**
 
@@ -49,7 +49,7 @@ Just type `gitup help` and see the magic...
 
 ## GitLab and others
 
-If you want to use GitUp with another git-based solution than GitHub, just replace the line `GIT_WEB="https://github.com/"` whit the .
+If you want to use GitUp with another git-based solution than GitHub, replace the variable `GIT_WEB`.
 
 ## TO-DO
 
