@@ -12,7 +12,8 @@ NAME="usi"
 DESCRIPTION="A script for installing scripts, basically."
 COMMAND="INSTALLER"
 
-RELEASE="DRB"
+DATE="2015.10.22"
+RELEASE="DBR"
 CODENAME="Allegro"
 
 COPYRIGHT="Copyright 2015, Federico Damián. All rights reserved."
@@ -20,13 +21,9 @@ LICENSE="BSD 3-Clause"
 
 # USI information
 
-INSTALL_PNAME="GitUp"
-INSTALL_BINARY="gitup"
-INSTALL_LOCATION=/usr/bin/
-
-## help command info
-
-ARGUMENTS=""
+ISCRIPT_NAME="GitUp"
+ISCRIPT_FILE="gitup"
+ISCRIPT_PATH=/usr/bin/
 
 ### options
 ### ISSUES: you need to put an "\n" (or the $NLINE variable) on every new line
@@ -41,14 +38,14 @@ OPTIONS_LIST="
 ## prints the help section
 
 print_help() {
-echo -e ""$NLINE""$BOLD"Usage: "$COMMAND" "$ARGUMENTS""$COLEND""$NLINE""$OPTIONS_HEADER""$NLINE""$OPTIONS_LIST""$NLINE""
+echo -e ""$NLINE""$BOLD"Usage: "$COMMAND""$COLEND""$NLINE""$OPTIONS_HEADER""$NLINE""$OPTIONS_LIST""$NLINE""
 }
 
 ## prints the about section
 
 print_about() {
 echo -e "
-"$BOLD""$NAME" version "$RELEASE" \"$CODENAME\".
+"$BOLD""$NAME" version "$DATE" "$RELEASE" \"$CODENAME\".
 "$DESCRIPTION"
 "$COPYRIGHT"
 "$NAME" is released under the "$LICENSE" license."$COLEND"
@@ -77,7 +74,7 @@ check_root() {
 	if [ ! $(whoami) = root ]
 	then
 		echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
-		echo -e ""$BOLD"You are not root. "$INSTALL_PNAME" will not be installed."$COLEND""$NLINE""
+		echo -e ""$BOLD"You are not root. "$ISCRIPT_NAME" will not be installed."$COLEND""$NLINE""
 		exit
 	fi
 }
@@ -85,12 +82,12 @@ check_root() {
 # runtime checks
 
 check_installed() {
-	if [ -f "$INSTALL_LOCATION""$INSTALL_BINARY" ]
+	if [ -f "$ISCRIPT_PATH""$ISCRIPT_FILE" ]
 	then
-		echo -e ""$NLINE""$DONE""$INSTALL_PNAME" is installed!"$COLEND""$NLINE""
+		echo -e ""$NLINE""$DONE""$ISCRIPT_NAME" is installed!"$COLEND""$NLINE""
 		exit
 	else
-		echo -e ""$NLINE""$ERROR""$INSTALL_PNAME" is NOT installed!"$COLEND""$NLINE""
+		echo -e ""$NLINE""$ERROR""$ISCRIPT_NAME" is NOT installed!"$COLEND""$NLINE""
 		exit
 	fi
 }
@@ -102,20 +99,19 @@ case $1 in
 	"help")	print_help;;
 	"")
 		check_root
-		echo -e ""$NLINE""$BOLD"Installing..."$COLEND""; cp "$INSTALL_BINARY" "$INSTALL_LOCATION""$INSTALL_BINARY"
+		echo -e ""$NLINE""$BOLD"Installing..."$COLEND""; cp "$ISCRIPT_FILE" "$ISCRIPT_PATH""$ISCRIPT_FILE"
 		print_done
 		;;
 	"uninstall")
 		check_root
-		echo -e ""$NLINE""$BOLD"Uninstalling..."$COLEND""; rm -rf "$INSTALL_LOCATION""$INSTALL_BINARY"
+		echo -e ""$NLINE""$BOLD"Uninstalling..."$COLEND""; rm -rf "$ISCRIPT_PATH""$ISCRIPT_FILE"
 		print_done
 		;;
 	"check")
 		check_root
-		echo -e ""$NLINE""$BOLD"Checking for "$INSTALL_PNAME"..."$COLEND""; check_installed
+		echo -e ""$NLINE""$BOLD"Checking for "$ISCRIPT_NAME"..."$COLEND""; check_installed
 		print_done
 		;;
 esac
 
 # end of script
-
