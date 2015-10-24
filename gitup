@@ -1,31 +1,22 @@
 #!/bin/bash
 
-## set script info
+## information for GitUp
 
 NAME="GitUp"
 DESCRIPTION="The bash script that makes 'git' easier."
 COMMAND="gitup"
-
 MAYOR_RELEASE="1"
 MINOR_RELEASE="0"
 FIXER_RELEASE="0"
 DEV_RELEASE="RELEASE"
 CODENAME="Adagio"
-
+WEBSITE="https://github.com/feskyde/gitup"
 COPYRIGHT="Copyright 2015, Federico Damián. All rights reserved."
 LICENSE="BSD 3-Clause"
 
-WEBSITE="https://github.com/feskyde/gitup"
+# configurations for GitUp
 
-## replace this string if you want to use GitUp with another 'git'-based solution or web protocol
-
-GIT_PROT="https"
-GIT_WEB=""$GIT_PROT"://github.com"
-
-
-## help information
-
-ARGUMENTS="[COMMAND]"
+GIT_WEB="https://github.com"
 
 print_about() {
 echo -e "
@@ -47,7 +38,7 @@ Configuration:
 
 lc, local-config:		local user config
 gc, global-config:		global user config
-print-git:			prints the git webpage that you're using
+print-gitweb:			prints the git webpage that you're using
 
 Repository:
 
@@ -117,10 +108,33 @@ check_folder() {
 
 # runtime functions
 
-print_git() {
+print_gitweb() {
 	echo -e ""$NLINE""$BOLD"Active git upload setting:"$COLEND""$NLINE""
 	echo -e ""$GIT_WEB""
 	print_finished
+}
+
+# check if global and local configurations are setted
+
+SELECT_CONFIG="\"Global\" \"Local\""
+
+check_config() {
+	if [ ! -f ~/.gitconfig ] || [ ! -f ./.git/config ]; then
+		echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""
+		echo -e ""$NLINE""$BOLD"There is not any config file!"$COLEND""$NLINE""
+		echo -e ""$NLINE""$BOLD"What configuration do you want to set?"$COLEND""$NLINE""
+		eval set $SELECT_CONFIG
+		select opt in "$@";do
+			if [ "$opt" = "Global" ];then
+				set_config; global_config; print_finished
+			elif [ "$opt" = "Local" ];then
+				set_config; local_config; print_finished
+			else
+				echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
+				echo -e ""$NLINE""$BOLD"Invalid option!"$COLEND""$NLINE""
+			fi
+		done
+	fi
 }
 
 ## reads configurations strings
@@ -166,9 +180,7 @@ read_names() {
 ## repo-setup
 
 repo_setup() {
-	git_init
-	read_names
-	add_commit
+	check_config; git_init; read_names; add_commit
 	echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin "$GIT_WEB"/"$user_name"/"$repo_name".git
 	echo -e ""$NLINE""$BOLD"Pushing to branch 'master'..."$COLEND""$NLINE""; git push -u origin master
 }
@@ -176,7 +188,7 @@ repo_setup() {
 ## function for commits
 
 make_commit() {
-	check_folder
+	check_config; check_folder
 	add_commit
 	read -p $'\n\e[1mPush to branch: \e[0m' branch_push
 	echo -e ""$NLINE""$BOLD"Pushing to branch '"$branch_push"'..."$COLEND""$NLINE""; git push -u origin "$branch_push"
@@ -185,7 +197,7 @@ make_commit() {
 ## function for tags
 
 make_tag() {
-	check_folder
+	check_config; check_folder
 	read -p $'\n\e[1mTag version: \e[0m' tag_version
 	read -p $'\n\e[1mTag message: \e[0m' tag_message
 	echo -e ""$NLINE""$BOLD"Adding files to tag '"$tag_version"'..."$COLEND""; git add .; git tag -a "$tag_version" -m "$tag_message"
@@ -269,7 +281,7 @@ check_gitbin
 case $1 in
 	"about") print_about;;
 	"help"|"") print_help;;
-	"print-git") print_git;;
+	"print-gitweb") print_gitweb;;
 	"global-config"|"gc") global_config; print_finished;;
 	"local-config"|"lc") local_config; print_finished;;
 	"init"|"in") git_init; print_finished;;
