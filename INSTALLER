@@ -12,7 +12,7 @@ NAME="usi"
 DESCRIPTION="A script for installing scripts, basically."
 COMMAND="INSTALLER"
 
-DATE="2015.10.22"
+DATE="2015.10.23"
 RELEASE="DBR"
 CODENAME="Allegro"
 
@@ -82,13 +82,21 @@ check_root() {
 # runtime checks
 
 check_installed() {
-	if [ -f "$ISCRIPT_PATH""$ISCRIPT_FILE" ]
-	then
+	if [ -f "$ISCRIPT_PATH""$ISCRIPT_FILE" ]; then
 		echo -e ""$NLINE""$DONE""$ISCRIPT_NAME" is installed!"$COLEND""$NLINE""
 		exit
 	else
 		echo -e ""$NLINE""$ERROR""$ISCRIPT_NAME" is NOT installed!"$COLEND""$NLINE""
 		exit
+	fi
+}
+
+check_debian() {
+	if [ -f $(which apt) ]; then
+		echo -e ""$NLINE""$BOLD"Fixing coloration errors for Debian/Ubuntu"$COLEND""$NLINE""
+		sed "s/#force_color_prompt=yes/force_color_prompt=yes/g" /home/*/.bashrc
+		sed "s/#force_color_prompt=yes/force_color_prompt=yes/g" /usr/skel/.bashrc
+		sed "s/#force_color_prompt=yes/force_color_prompt=yes/g" /root/.bashrc
 	fi
 }
 
@@ -98,7 +106,7 @@ case $1 in
 	"about") print_about;;
 	"help")	print_help;;
 	"")
-		check_root
+		check_root; check_debian
 		echo -e ""$NLINE""$BOLD"Installing..."$COLEND""; cp "$ISCRIPT_FILE" "$ISCRIPT_PATH""$ISCRIPT_FILE"
 		print_done
 		;;
