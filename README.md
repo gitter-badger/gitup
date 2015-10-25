@@ -14,19 +14,6 @@ As GitUp is a very simple script, it depends on only two packages:
 Run `./INSTALLER` script as root user (or maybe using `sudo`).
 You can use `gitup` if is not installed.
 
-## About Debian/Ubuntu compatibility
-
-**Debian** and **Ubuntu** distributions use patched version of `coreutils` packages (which contains all the commands used by the script), that avoids the 'prompt coloration'.
-Thus, is a problem with this, 'cause the prompt coloration is used a lot on `gitup`, the command-line will print this:
-
-\e[1mReal Name: [\0m
-
-Instead of this:
-
-**Real name:**
-
-So, I'm working on a solution for this problem? Obviously yes! :smile:
-
 ## Usage
 
 You can use large-type commands...
@@ -54,6 +41,7 @@ If you want to use GitUp with another git-based solution than GitHub, replace th
 ## TO-DO
 
 - [x] Make this script available for other `git` solutions (GitLab and such).
+- [x] Fix the Debian/Ubuntu coloration problem.
 - [ ] Add more commands.
 - [ ] Make packages for some Linux and BSD distros.
 
