@@ -126,9 +126,9 @@ check_config() {
 		eval set $SELECT_CONFIG
 		select opt in "$@";do
 			if [ "$opt" = "Global" ];then
-				set_config; global_config; print_finished; exit
+				set_config; global_config; print_finished
 			elif [ "$opt" = "Local" ];then
-				set_config; local_config; print_finished; exit
+				set_config; local_config; print_finished
 			else
 				echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
 				echo -e ""$NLINE""$BOLD"Invalid option!"$COLEND""$NLINE""
