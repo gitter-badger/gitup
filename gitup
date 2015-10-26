@@ -38,7 +38,7 @@ Configuration:
 
 lc, local-config:		local user config
 gc, global-config:		global user config
-print-gitweb:			prints the git webpage that you're using
+pg, print-gitweb:		prints the git webpage that you're using
 
 Repository:
 
@@ -102,7 +102,6 @@ check_folder() {
 		echo -e ""$NLINE""$BOLD"Running repo-setup..."$COLEND""$NLINE""; git_init
 		read_names
 		echo -e ""$NLINE""$BOLD"Adding origin..."$COLEND""$NLINE""; git remote add origin "$GIT_WEB"/"$user_name"/"$repo_name".git
-		print_finished
 	fi
 }
 
@@ -111,7 +110,6 @@ check_folder() {
 print_gitweb() {
 	echo -e ""$NLINE""$BOLD"Active git upload setting:"$COLEND""$NLINE""
 	echo -e ""$GIT_WEB""
-	print_finished
 }
 
 # check if global and local configurations are setted
@@ -126,9 +124,9 @@ check_config() {
 		eval set $SELECT_CONFIG
 		select opt in "$@";do
 			if [ "$opt" = "Global" ];then
-				set_config; global_config; print_finished; exit
+				set_config; global_config; exit
 			elif [ "$opt" = "Local" ];then
-				set_config; local_config; print_finished; exit
+				set_config; local_config; exit
 			else
 				echo -e ""$NLINE""$ERROR"ERROR:"$COLEND""$NLINE""
 				echo -e ""$NLINE""$BOLD"Invalid option!"$COLEND""$NLINE""
@@ -264,12 +262,6 @@ fetch_request() {
 
 # post-runtime functions
 
-## prints the 'Finished!' message
-
-print_finished() {
-	echo -e ""$NLINE""$DONE"Finished!"$COLEND""$NLINE""
-}
-
 # pre-runtime checks
 
 check_gitbin
@@ -277,30 +269,31 @@ check_gitbin
 # start of case (commands)
 
 case $1 in
+	"") print_about; print_help;;
 	"about") print_about;;
-	"help"|"") print_help;;
-	"print-gitweb") print_gitweb;;
-	"global-config"|"gc") global_config; print_finished;;
-	"local-config"|"lc") local_config; print_finished;;
-	"init"|"in") git_init; print_finished;;
-	"repo-setup"|"rs") repo_setup; print_finished;;
-	"commit"|"cm") make_commit; print_finished;;
-	"tag"|"tg") make_tag; print_finished;;
-	"clone"|"cl") git_clone; print_finished	;;
-	"fetch"|"fc") git fetch origin; print_finished;;
-	"garbage-collector"|"gb") git gc; print_finished;;
-	"check-filesystem"|"cf") git fsck; print_finished;;
-	"reset"|"rt") git reset --hard HEAD; print_finished;;
-	"status"|"st") git_status; print_finished;;
-	"log"|"lg") git log; print_finished;;
-	"ls-tree"|"lt") ls_tree; print_finished;;
-	"diff"|"df") git diff; print_finished;;
-	"grep"|"gp") git_grep; print_finished;;
-	"branch-create"|"bc") branch_create; print_finished;;
-	"branch-remove"|"br") branch_remove; print_finished;;
-	"branch-switch"|"bs") branch_switch; print_finished;;
-	"merge"|"mg") branch_merge; print_finished;;
-	"fetch-request"|"fr") fetch_request; print_finished;;
+	"help") print_help;;
+	"print-gitweb"|"pg") print_gitweb;;
+	"global-config"|"gc") global_config;;
+	"local-config"|"lc") local_config;;
+	"init"|"in") git_init;;
+	"repo-setup"|"rs") repo_setup;;
+	"commit"|"cm") make_commit;;
+	"tag"|"tg") make_tag;;
+	"clone"|"cl") git_clone;;
+	"fetch"|"fc") git fetch origin;;
+	"garbage-collector"|"gb") git gc;;
+	"check-filesystem"|"cf") git fsck;;
+	"reset"|"rt") git reset --hard HEAD;;
+	"status"|"st") git_status;;
+	"log"|"lg") git log;;
+	"ls-tree"|"lt") ls_tree;;
+	"diff"|"df") git diff;;
+	"grep"|"gp") git_grep;;
+	"branch-create"|"bc") branch_create;;
+	"branch-remove"|"br") branch_remove;;
+	"branch-switch"|"bs") branch_switch;;
+	"merge"|"mg") branch_merge;;
+	"fetch-request"|"fr") fetch_request;;
 esac
 
 # script end
