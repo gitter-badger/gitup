@@ -1,5 +1,9 @@
 # GitUp
 
+[![Join the chat at https://gitter.im/feskyde/gitup](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/feskyde/gitup?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Join the chat at https://gitter.im/feskyde/gitup](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/feskyde/gitup?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 The shell script that makes `git` easier.
 
 ## Dependencies
